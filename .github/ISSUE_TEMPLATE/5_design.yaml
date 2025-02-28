@@ -1,0 +1,84 @@
+name: "🎨 Design"
+description: "Criação e atualização dos layouts da aplicação."
+title: "[Design] "
+labels: ["design"]
+
+body:
+  - type: markdown
+    attributes:
+      value: "## 🎨 **Solicitação de Design**"
+
+  - type: input
+    id: tela
+    attributes:
+      label: "📌 Nome da Tela/Componente"
+      description: "Informe qual tela ou elemento precisa ser criado/modificado."
+      placeholder: "Ex: Tela de Login / Botão de Compra"
+
+  - type: dropdown
+    id: tipo
+    attributes:
+      label: "📌 Tipo de Design"
+      description: "Selecione a categoria do design solicitado."
+      options:
+        - UI (Interface do Usuário)
+        - UX (Experiência do Usuário)
+        - Branding (Identidade Visual)
+        - Protótipo Interativo
+        - Outros
+
+  - type: textarea
+    id: descricao
+    attributes:
+      label: "📌 Descrição e Objetivo"
+      description: "Explique o que precisa ser feito e qual o objetivo do design."
+      placeholder: "Ex: Criar um novo layout para a tela de checkout, garantindo melhor experiência de compra."
+
+  - type: textarea
+    id: requisitos
+    attributes:
+      label: "📌 Requisitos e Considerações"
+      description: "Liste requisitos específicos, como paleta de cores, estilos de fonte ou elementos obrigatórios."
+      placeholder: "- Utilizar as cores primárias do branding\n- Botão CTA destacado\n- Espaçamento responsivo"
+
+  - type: textarea
+    id: referencias
+    attributes:
+      label: "📌 Referências e Inspirações"
+      description: "Adicione links para referências visuais, wireframes ou outros designs similares."
+      placeholder: "Ex: https://www.behance.net/gallery/12345678/UI-Design-Example"
+
+  - type: textarea
+    id: wireframe
+    attributes:
+      label: "📌 Link para Wireframe/Protótipo"
+      description: "Se houver um protótipo ou wireframe no Figma, Adobe XD ou outra ferramenta, adicione o link aqui."
+      placeholder: "Ex: https://www.figma.com/file/XYZ123456"
+
+  - type: textarea
+    id: interacoes
+    attributes:
+      label: "📌 Interações e Animações (se aplicável)"
+      description: "Caso o design envolva animações ou transições, explique como devem funcionar."
+      placeholder: "Ex: O botão deve ter um efeito hover de escala e transição suave."
+
+  - type: textarea
+    id: tarefas
+    attributes:
+      label: "📌 Tarefas a Serem Realizadas"
+      description: "Liste as etapas do processo de design."
+      placeholder: "- Criar wireframe inicial\n- Validar com a equipe\n- Desenvolver protótipo interativo\n- Revisão final"
+
+  - type: textarea
+    id: feedback
+    attributes:
+      label: "📌 Feedback e Validação"
+      description: "Quem será responsável por validar esse design e fornecer feedback?"
+      placeholder: "Ex: O cliente e a equipe de desenvolvimento."
+
+  - type: textarea
+    id: prazo
+    attributes:
+      label: "📌 Prazo e Prioridade"
+      description: "Defina um prazo estimado e a prioridade dessa tarefa."
+      placeholder: "Ex: Alta prioridade - Necessário até 25/02/2025"

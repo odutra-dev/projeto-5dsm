@@ -1,0 +1,27 @@
+name: "Documentação (Docs)"
+description: "Criação, atualização ou melhorias na documentação."
+title: "[Docs] "
+labels: ["documentation"]
+body:
+  - type: markdown
+    attributes:
+      value: "## 📄 Detalhes da Documentação"
+
+  - type: textarea
+    id: descricao
+    attributes:
+      label: "📌 O que precisa ser documentado?"
+      description: "Explique o conteúdo a ser criado ou atualizado."
+
+  - type: textarea
+    id: motivo
+    attributes:
+      label: "📌 Motivo da documentação"
+      description: "Justifique a importância dessa documentação."
+
+  - type: textarea
+    id: tarefas
+    attributes:
+      label: "🛠 Tarefas"
+      description: "Liste as ações necessárias."
+      placeholder: "- Criar o documento\n- Revisar o conteúdo\n- Validar com a equipe"

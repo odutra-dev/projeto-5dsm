@@ -1,0 +1,27 @@
+name: "💡Request Feature"
+description: "Solicitação e desenvolvimento de novas funcionalidades."
+title: "[Request Feature] "
+labels: ["request feature"]
+
+body:
+  - type: markdown
+    attributes:
+      value: "## 🚀 Descrição da Funcionalidade"
+
+  - type: textarea
+    id: descricao
+    attributes:
+      label: "📌 O que essa funcionalidade deve fazer?"
+      description: "Explique claramente o que será implementado."
+
+  - type: textarea
+    id: problema
+    attributes:
+      label: "📌 Qual o problema que essa feature resolve?"
+      description: "Explique o motivo e os benefícios da implementação."
+
+  - type: textarea
+    id: solucao
+    attributes:
+      label: "📌 Possíveis soluções"
+      description: "Sugira abordagens ou tecnologias para a implementação."

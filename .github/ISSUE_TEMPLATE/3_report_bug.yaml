@@ -1,0 +1,35 @@
+name: "🪲 Reportar Bug"
+description: "Relatar erros e falhas no sistema."
+title: "[Bug]"
+labels: ["bug"]
+
+body:
+  - type: markdown
+    attributes:
+      value: "## 🐛 Descrição do Bug"
+
+  - type: textarea
+    id: problema
+    attributes:
+      label: "📌 Descreva o problema?"
+      description: "Explique claramente o problema encontrado."
+
+  - type: textarea
+    id: passos
+    attributes:
+      label: "📌 Passos para reproduzir"
+      description: "Descreva como reproduzir o erro."
+      placeholder: "1. Abrir a aplicação\n2. Clicar no botão X\n3. O erro aparece\n Se possivel, enviar uma captura de tela ou video."
+
+  - type: input
+    id: dispositivo
+    attributes:
+      label: "📱 Qual disposito?"
+      description: "Informe o dispositivo utilizado com a versão do sistema."
+      placeholder: "Ex: Samsung Galaxy S20, Android 10"
+
+  - type: textarea
+    id: evidencias
+    attributes:
+      label: "📌 Evidências"
+      description: "Adicione prints, vídeos ou logs, se possível."
