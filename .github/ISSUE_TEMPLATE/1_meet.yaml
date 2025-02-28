@@ -1,4 +1,4 @@
-name: Reunião (Meet)
+name: "💻 Reunião"
 description: "Template para organizar reuniões com clientes ou equipe."
 title: "[Meet] "
 labels: ["meet"]
@@ -10,8 +10,6 @@ body:
       label: "📅 Data"
       description: "Informe a data da reunião."
       placeholder: "Ex: 20/02/2025"
-      validations:
-        required: true
 
   - type: input
     id: hora
@@ -19,8 +17,6 @@ body:
       label: "⏰ Horário"
       description: "Informe o horário da reunião."
       placeholder: "Ex: 15:00"
-      validations:
-        required: true
 
   - type: input
     id: local
@@ -28,8 +24,6 @@ body:
       label: "📍Local"
       description: "Informe o Local da reunião."
       placeholder: "Ex: Av. Paulista"
-      validations:
-        required: true
 
   - type: textarea
     id: objetivo
