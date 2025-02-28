@@ -1,19 +1,19 @@
-name: "Detect Movement to Review"
+name: Move card
 
 on:
-  project_card:
-    types: [moved]
+  # refer https://docs.github.com/en/actions/learn-github-actions/events-that-trigger-workflows#issues
+  issues:
+    types: [assigned]
+  # refer https://docs.github.com/en/actions/learn-github-actions/events-that-trigger-workflows#issue_comment
+  issue_comment:
+    types: [created]
 
 jobs:
-  detect-move:
+  build:
     runs-on: ubuntu-latest
     steps:
-      - name: Log Card Movement
-        run: |
-          echo "Card movido para a coluna: ${{ github.event.project_card.column_name }}"
-          
-          if [[ "${{ github.event.project_card.column_name }}" == "Review" ]]; then
-            echo "O card foi movido para a coluna Review!"
-          else
-            echo "O card não foi movido para Review, ignorando."
-          fi
+      - uses: ineshbose/project-card-action@v1
+        with:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+          TARGET_COLUMN: 'Review'
