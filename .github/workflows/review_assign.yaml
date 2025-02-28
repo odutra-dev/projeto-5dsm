@@ -1,23 +1,18 @@
-name: Adds all issues that don't include the 'bug' or 'needs-triage' labels to project board
-
-permissions:
-  contents: read
-  issues: write
-  projects: write
+name: Teste Projects API
 
 on:
-  issues:
-    types:
-      - assigned
+  workflow_dispatch:  # Permite rodar manualmente
 
 jobs:
-  add-to-project:
-    name: Add issue to project
+  test-projects:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      projects: read  # Dá permissão para acessar os projetos
     steps:
-      - uses: actions/add-to-project@RELEASE_VERSION
+      - name: Listar projetos do repositório
+        uses: octokit/request-action@v2.x
         with:
-          project-url: https://github.com/users/DutraGames/projects/3
-          github-token: ${{ secrets.ADD_TO_PROJECT_PAT }}
-          labeled: bug, documentation, meet, design
-          label-operator: NOT
+          route: GET /repos/${{ github.repository }}/projects
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
