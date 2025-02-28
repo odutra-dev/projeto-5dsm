@@ -19,7 +19,7 @@ body:
     attributes:
       label: "📌 Passos para reproduzir"
       description: "Descreva como reproduzir o erro."
-      placeholder: "1. Abrir a aplicação\n2. Clicar no botão X\n3. O erro aparece"
+      placeholder: "1. Abrir a aplicação\n2. Clicar no botão X\n3. O erro aparece\n Se possivel, enviar uma captura de tela ou video."
 
   - type: input
     id: dispositivo
