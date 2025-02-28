@@ -1,84 +1,19 @@
-name: Auto Assign Reviewer
+name: "Detect Movement to Review"
 
 on:
   project_card:
     types: [moved]
 
-permissions:
-  contents: read
-  pull-requests: write
-  issues: write
-  project: write
-
 jobs:
-  assign-reviewer:
+  detect-move:
     runs-on: ubuntu-latest
     steps:
-      - name: Check if moved to "Review"
+      - name: Log Card Movement
         run: |
-          COLUMN_NAME="${{ github.event.project_card.column_name }}"
-          if [[ "$COLUMN_NAME" == "Review" ]]; then
-            echo "Card moved to Review. Proceeding..."
+          echo "Card movido para a coluna: ${{ github.event.project_card.column_name }}"
+          
+          if [[ "${{ github.event.project_card.column_name }}" == "Review" ]]; then
+            echo "O card foi movido para a coluna Review!"
           else
-            echo "Not in Review. Exiting."
-            exit 0
+            echo "O card não foi movido para Review, ignorando."
           fi
-
-      - name: Extract Issue or PR number
-        id: extract_number
-        run: |
-          CONTENT_URL="${{ github.event.project_card.content_url }}"
-          ISSUE_NUMBER=$(basename "$CONTENT_URL")
-          echo "ISSUE_NUMBER=$ISSUE_NUMBER" >> $GITHUB_ENV
-
-      - name: Assign Reviewer (for PRs)
-        if: ${{ github.event.project_card.content_url != '' }}
-        uses: actions/github-script@v7
-        with:
-          script: |
-            const issueNumber = process.env.ISSUE_NUMBER;
-            const repo = context.repo;
-            const reviewer = "AleLimaFatec";
-            const contentURL = context.payload.project_card.content_url;
-
-            if (contentURL.includes("pulls")) {
-              try {
-                await github.rest.pulls.requestReviewers({
-                  owner: repo.owner,
-                  repo: repo.repo,
-                  pull_number: issueNumber,
-                  reviewers: [reviewer]
-                });
-                console.log(`Assigned reviewer ${reviewer} to PR #${issueNumber}`);
-              } catch (error) {
-                console.log(`Error assigning reviewer to PR: ${error.message}`);
-              }
-            } else {
-              console.log("Not a PR, skipping reviewer assignment.");
-            }
-
-      - name: Assign Issue to Professor (if it's an Issue)
-        if: ${{ github.event.project_card.content_url != '' }}
-        uses: actions/github-script@v7
-        with:
-          script: |
-            const issueNumber = process.env.ISSUE_NUMBER;
-            const repo = context.repo;
-            const assignee = "AleLimaFatec";
-            const contentURL = context.payload.project_card.content_url;
-
-            if (contentURL.includes("issues")) {
-              try {
-                await github.rest.issues.addAssignees({
-                  owner: repo.owner,
-                  repo: repo.repo,
-                  issue_number: issueNumber,
-                  assignees: [assignee]
-                });
-                console.log(`Assigned issue #${issueNumber} to ${assignee}`);
-              } catch (error) {
-                console.log(`Error assigning issue: ${error.message}`);
-              }
-            } else {
-              console.log("Not an Issue, skipping assignment.");
-            }
