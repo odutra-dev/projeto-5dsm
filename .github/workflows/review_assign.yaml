@@ -1,4 +1,4 @@
-name: Move card
+name: Adds all issues that don't include the 'bug' or 'needs-triage' labels to project board
 
 permissions:
   contents: read
@@ -6,19 +6,18 @@ permissions:
   projects: write
 
 on:
-  # refer https://docs.github.com/en/actions/learn-github-actions/events-that-trigger-workflows#issues
   issues:
-    types: [assigned]
-  # refer https://docs.github.com/en/actions/learn-github-actions/events-that-trigger-workflows#issue_comment
-  issue_comment:
-    types: [created]
+    types:
+      - assigned
 
 jobs:
-  build:
+  add-to-project:
+    name: Add issue to project
     runs-on: ubuntu-latest
     steps:
-      - uses: ineshbose/project-card-action@v1
+      - uses: actions/add-to-project@RELEASE_VERSION
         with:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          ISSUE_NUMBER: ${{ github.event.issue.number }}
-          TARGET_COLUMN: 'Review'
+          project-url: https://github.com/users/DutraGames/projects/3
+          github-token: ${{ secrets.ADD_TO_PROJECT_PAT }}
+          labeled: bug, documentation, meet, design
+          label-operator: NOT
