@@ -1,0 +1,89 @@
+name: Auto Assign Reviewer
+
+on:
+  project_card:
+    types: [moved]
+
+permissions:
+  contents: read
+  pull-requests: write
+  issues: write
+  project: write
+
+jobs:
+  assign-reviewer:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check if moved to "Review"
+        run: |
+          COLUMN_NAME="${{ github.event.project_card.column_name }}"
+          if [[ "$COLUMN_NAME" == "Review" ]]; then
+            echo "Card moved to Review. Proceeding..."
+          else
+            echo "Not in Review. Exiting."
+            exit 0
+          fi
+
+      - name: Extract Issue or PR number
+        id: extract_number
+        run: |
+          CONTENT_URL="${{ github.event.project_card.content_url }}"
+          ISSUE_NUMBER=$(basename "$CONTENT_URL")
+          echo "ISSUE_NUMBER=$ISSUE_NUMBER" >> $GITHUB_ENV
+
+      - name: Assign Reviewer (for PRs)
+        if: github.event.project_card.content_url != ''
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const issueNumber = process.env.ISSUE_NUMBER;
+            const repo = context.repo;
+            const reviewer = "AleLimaFatec";
+
+            try {
+              await github.rest.pulls.requestReviewers({
+                owner: repo.owner,
+                repo: repo.repo,
+                pull_number: issueNumber,
+                reviewers: [reviewer]
+              });
+              console.log(`Assigned reviewer ${reviewer} to PR #${issueNumber}`);
+            } catch (error) {
+              console.log(`Not a PR or error assigning reviewer: ${error.message}`);
+            }
+
+      - name: Assign Issue to Professor (if it's an Issue)
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const issueNumber = process.env.ISSUE_NUMBER;
+            const repo = context.repo;
+            const assignee = "AleLimaFatec";
+
+            try {
+              await github.rest.issues.addAssignees({
+                owner: repo.owner,
+                repo: repo.repo,
+                issue_number: issueNumber,
+                assignees: [assignee]
+              });
+              console.log(`Assigned issue #${issueNumber} to ${assignee}`);
+            } catch (error) {
+              console.log(`Not an issue or error assigning: ${error.message}`);
+            }
+
+      - name: Comment on PR or Issue
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const issueNumber = process.env.ISSUE_NUMBER;
+            const repo = context.repo;
+            const reviewer = "AleLimaFatec";
+
+            await github.rest.issues.createComment({
+              owner: repo.owner,
+              repo: repo.repo,
+              issue_number: issueNumber,
+              body: `@${reviewer}, este item foi movido para **Review** e está pronto para revisão!`
+            });
+            console.log(`Comment added to issue/PR #${issueNumber}`);
