@@ -1,5 +1,10 @@
 name: Move card
 
+permissions:
+  contents: read
+  issues: write
+  projects: write
+
 on:
   # refer https://docs.github.com/en/actions/learn-github-actions/events-that-trigger-workflows#issues
   issues:
