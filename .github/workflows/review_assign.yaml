@@ -41,7 +41,7 @@ jobs:
             const reviewer = "AleLimaFatec";
             const contentURL = context.payload.project_card.content_url;
 
-            if (contentURL.includes("pulls")) {  // Verifica se é PR
+            if (contentURL.includes("pulls")) {
               try {
                 await github.rest.pulls.requestReviewers({
                   owner: repo.owner,
@@ -67,7 +67,7 @@ jobs:
             const assignee = "AleLimaFatec";
             const contentURL = context.payload.project_card.content_url;
 
-            if (contentURL.includes("issues")) {  // Verifica se é Issue
+            if (contentURL.includes("issues")) {
               try {
                 await github.rest.issues.addAssignees({
                   owner: repo.owner,
@@ -77,4 +77,8 @@ jobs:
                 });
                 console.log(`Assigned issue #${issueNumber} to ${assignee}`);
               } catch (error) {
-                console.log(`Error assigning assigne
+                console.log(`Error assigning issue: ${error.message}`);
+              }
+            } else {
+              console.log("Not an Issue, skipping assignment.");
+            }
