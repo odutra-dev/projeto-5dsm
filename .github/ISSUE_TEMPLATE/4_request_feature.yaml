@@ -6,19 +6,21 @@ labels: ["request feature"]
 body:
   - type: markdown
     attributes:
-      value: "## 🚀 Descrição da Funcionalidade"
+      value: "## 🚀 Descrição de uma nova Funcionalidade"
 
   - type: textarea
     id: descricao
     attributes:
       label: "📌 O que essa funcionalidade deve fazer?"
       description: "Explique claramente o que será implementado."
+    validations:
+      required: true
 
   - type: textarea
     id: problema
     attributes:
       label: "📌 Qual o problema que essa feature resolve?"
-      description: "Explique o motivo e os benefícios da implementação."
+      description: "Explique o motivo e os benefícios da implementação. Se possivel, fornecer um exemplo de uso e issue aberta."
 
   - type: textarea
     id: solucao

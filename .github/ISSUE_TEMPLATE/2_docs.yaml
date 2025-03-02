@@ -12,6 +12,8 @@ body:
     attributes:
       label: "📌 O que precisa ser documentado?"
       description: "Explique o conteúdo a ser criado ou atualizado."
+    validations:
+      required: true
 
   - type: textarea
     id: motivo

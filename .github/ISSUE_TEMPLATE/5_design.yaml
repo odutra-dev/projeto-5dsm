@@ -14,6 +14,8 @@ body:
       label: "📌 Nome da Tela/Componente"
       description: "Informe qual tela ou elemento precisa ser criado/modificado."
       placeholder: "Ex: Tela de Login / Botão de Compra"
+    validations:
+      required: true
 
   - type: dropdown
     id: tipo
@@ -26,6 +28,8 @@ body:
         - Branding (Identidade Visual)
         - Protótipo Interativo
         - Outros
+    validations:
+      required: true
 
   - type: textarea
     id: descricao

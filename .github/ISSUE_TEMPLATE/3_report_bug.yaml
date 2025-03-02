@@ -13,6 +13,8 @@ body:
     attributes:
       label: "📌 Descreva o problema?"
       description: "Explique claramente o problema encontrado."
+    validations:
+      required: true
 
   - type: textarea
     id: passos
@@ -20,6 +22,8 @@ body:
       label: "📌 Passos para reproduzir"
       description: "Descreva como reproduzir o erro."
       placeholder: "1. Abrir a aplicação\n2. Clicar no botão X\n3. O erro aparece\n Se possivel, enviar uma captura de tela ou video."
+    validations:
+      required: true
 
   - type: input
     id: dispositivo
@@ -27,6 +31,8 @@ body:
       label: "📱 Qual disposito?"
       description: "Informe o dispositivo utilizado com a versão do sistema."
       placeholder: "Ex: Samsung Galaxy S20, Android 10"
+    validations:
+      required: true
 
   - type: textarea
     id: evidencias
