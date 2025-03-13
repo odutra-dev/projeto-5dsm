@@ -1,6 +1,6 @@
 {
-  "name": "my-app",
-  "version": "1.0.0",
+  "name": "GeladinhoSantista",
+  "version": "0.0.1",
   "main": "index.ts",
   "scripts": {
     "start": "expo start",
