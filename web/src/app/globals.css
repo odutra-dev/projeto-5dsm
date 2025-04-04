@@ -2,5 +2,9 @@
 
 @theme {
   --color-primary: #f493ae;
+  --color-primary-foreground: #eb7495;
   --color-secondary: #fffbd6;
+  --color-tertiary: #3198c2;
+  --color-quaternary: #a8cf45;
+  --color-quaternary-foreground: #82ae10;
 }
