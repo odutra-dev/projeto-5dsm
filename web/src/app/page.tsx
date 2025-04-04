@@ -28,7 +28,7 @@ export default function Home() {
           />
         </Link>
 
-        <div className="mt-12 flex flex-col  justify-center items-center w-full md:max-w-xl">
+        <div className="gap-2 mt-12 flex flex-col  justify-center items-center w-full md:max-w-xl">
           <p className="text-tertiary font-bold text-2xl md:text-3xl">
             Informações
           </p>
@@ -79,6 +79,15 @@ export default function Home() {
           </div>
         </div>
       </main>
+
+      <footer className="my-8 gap-2 flex flex-col justify-center items-center px-6 w-full">
+        <p className="text-quinary text-2xl">
+          © 2025 Geladinho Santista - Todos os Direitos reservados
+        </p>
+        <p className="text-quinary text-2xl">
+          Feito com 🤎 para a Disciplina de Lab de Dev. Mobile II
+        </p>
+      </footer>
     </>
   );
 }
