@@ -20,7 +20,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${nunitoSans.variable} font-sans antialiased bg-background`}
+        className={`${nunitoSans.variable} font-sans antialiased bg-secondary`}
       >
         {children}
       </body>
