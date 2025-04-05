@@ -15,24 +15,26 @@ export default function Home() {
       </header>
 
       <main className="mt-40 flex justify-center flex-col items-center px-6 w-full">
-        <Link
-          className="px-6 py-3 bg-primary h-12 md:h-16 text-base md:text-xl font-bold text-secondary w-full md:max-w-xl flex justify-between items-center gap-4 rounded-xl border-2 border-primary-foreground"
-          href="/"
-        >
-          Acessar o cardápio
-          <Image
-            src="/garfo-faca.svg"
-            alt="Garfo e faca"
-            width={24}
-            height={24}
-          />
-        </Link>
+        <section className="w-full md:max-w-xl">
+          <Link
+            className="px-6 py-3 bg-primary h-12 md:h-16 text-base md:text-xl font-bold text-secondary w-full md:max-w-xl flex justify-between items-center gap-4 rounded-xl border-2 border-primary-foreground"
+            href="/"
+          >
+            Acessar o cardápio
+            <Image
+              src="/garfo-faca.svg"
+              alt="Garfo e faca"
+              width={24}
+              height={24}
+            />
+          </Link>
+        </section>
 
-        <div className="gap-2 mt-12 flex flex-col  justify-center items-center w-full md:max-w-xl">
-          <p className="text-tertiary font-bold text-2xl md:text-3xl">
+        <section className="gap-2 mt-12 flex flex-col justify-center items-center w-full md:max-w-xl">
+          <h2 className="text-tertiary font-bold text-2xl md:text-3xl">
             Informações
-          </p>
-          <div className="flex flex-col bg-quaternary/20 border border-quaternary-foreground rounded-xl justify-center w-full md:max-w-xl ">
+          </h2>
+          <article className="flex flex-col bg-quaternary/20 border border-quaternary-foreground rounded-xl justify-center w-full md:max-w-xl">
             <div className="flex p-6 items-center gap-4">
               <Image src="/relogio.svg" alt="relogio" width={24} height={24} />
               <p className="text-quaternary text-sm md:text-xl">
@@ -76,8 +78,8 @@ export default function Home() {
                 @geladinho.santista
               </p>
             </div>
-          </div>
-        </div>
+          </article>
+        </section>
       </main>
 
       <footer className="my-8 gap-2 flex flex-col justify-center items-center px-6 w-full">
