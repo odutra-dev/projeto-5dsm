@@ -2,13 +2,36 @@ import fastify from "fastify";
 import cors from "@fastify/cors";
 import { fastifySwaggerUi } from "@fastify/swagger-ui";
 import { fastifySwagger } from "@fastify/swagger";
-import { request } from "http";
-import { collection, addDoc } from "firebase/firestore"; 
-import { db } from "./firebase/firebaseConfig"
+import { produtoRoute } from "./routes/produtoRoute";
 
 const app = fastify();
 
 app.register(cors);
+
+
+// Configuração do Swagger
+app.register(fastifySwagger, {
+  openapi: {
+    info: {
+      title: "Geladinho Santista API",
+      description: "API para Geladinho Santista",
+      version: "1.0.0",
+    },
+  },
+});
+
+app.register(fastifySwaggerUi, {
+  routePrefix: "/docs",
+  uiConfig: {
+    docExpansion: "full",
+    deepLinking: false,
+  },
+});
+
+app.register(produtoRoute, {
+  prefix: "/produtos",
+});
+
 
 app.listen({ port: 8001 }, (err) => {
     if (err) {
