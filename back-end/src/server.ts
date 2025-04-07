@@ -3,6 +3,7 @@ import cors from "@fastify/cors";
 import { fastifySwaggerUi } from "@fastify/swagger-ui";
 import { fastifySwagger } from "@fastify/swagger";
 import { produtoRoute } from "./routes/produtoRoute";
+import { clienteRoute } from "./routes/clienteRoute";
 
 const app = fastify();
 
@@ -26,6 +27,10 @@ app.register(fastifySwaggerUi, {
     docExpansion: "full",
     deepLinking: false,
   },
+});
+
+app.register(clienteRoute, {
+  prefix: "/clientes",
 });
 
 app.register(produtoRoute, {
