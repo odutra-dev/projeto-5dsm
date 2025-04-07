@@ -11,4 +11,14 @@ export class UseCaseProduto {
         const category = await this.repository.create({ nome, descricao, preco });
         return category;    
     }
+
+    async findAll(): Promise<Produto[]> {
+        const produtos = await this.repository.findAll();
+        return produtos;
+      }
+    
+      async findById(id: string): Promise<Produto | null> {
+        const produto = await this.repository.findById(id);
+        return produto;
+      }
 }

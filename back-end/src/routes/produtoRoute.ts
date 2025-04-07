@@ -4,6 +4,8 @@ import { NovoProduto } from "../@types/typesProdutos";
 import { UseCaseProduto } from "../usecases/UseCaseProduto";
 
 export async function produtoRoute(app: FastifyInstance) {
+    const useCaseProduto = new UseCaseProduto();
+
     app.post<{ Body: NovoProduto }>(
         "/",
         {
@@ -33,9 +35,9 @@ export async function produtoRoute(app: FastifyInstance) {
                     201: {
                         type: "object",
                         properties: {
-                            id: {type: "string"},
+                            id: { type: "string" },
                             nome: { type: "string" },
-                            descricao: { type: "string" }, 
+                            descricao: { type: "string" },
                             preco: { type: "number" },
                         }
                     }
@@ -46,17 +48,70 @@ export async function produtoRoute(app: FastifyInstance) {
             const useCaseProduto = new UseCaseProduto();
 
             try {
-                let { nome, descricao, preco } = request.body;
-        
-                const produto = await useCaseProduto.create({
-                  nome, descricao, preco
-                });
-        
+                const { nome, descricao, preco } = request.body;
+                const produto = await useCaseProduto.create({ nome, descricao, preco });
                 return reply.status(201).send(produto);
-              } catch (error) {
+            } catch (error) {
                 console.log(error);
                 return reply.status(500).send({ message: error });
-              }
+            }
         }
-    )
+    );
+
+    app.get("/", {
+        schema: {
+            tags: ["Produto"],
+            description: "Listar todos os produtos",
+            response: {
+                200: {
+                    type: "array",
+                    items: {
+                        type: "object", properties: {
+                            id: { type: "string" },
+                            nome: { type: "string" },
+                            descricao: { type: "string" },
+                            preco: { type: "number" },
+                        },
+                    },
+                },
+            },
+        }
+    }, async () => {
+        return await useCaseProduto.findAll();
+    });
+
+    app.get<{ Params: { id: string } }>("/:id", {
+        schema: {
+            tags: ["Produto"],
+            description: "Buscar produto por ID",
+            params: {
+                type: "object",
+                properties: {
+                    id: { type: "string" },
+                },
+                required: ["id"]
+            },
+            response: {
+                200: { type: "object", properties: {
+                    id: { type: "string" },
+                    nome: { type: "string" },
+                    descricao: { type: "string" },
+                    preco: { type: "number" },
+                },},
+                404: {
+                    type: "object",
+                    properties: {
+                        mensagem: { type: "string" },
+                    },
+                },
+            },
+        },
+    }, async (req, res) => {
+        const { id } = req.params;
+        const produto = await useCaseProduto.findById(id);
+        if (!produto) return res.status(404).send({ mensagem: "Produto não encontrado" });
+        return produto;
+    });
+
+
 }
