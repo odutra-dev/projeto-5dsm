@@ -4,6 +4,7 @@ import { fastifySwaggerUi } from "@fastify/swagger-ui";
 import { fastifySwagger } from "@fastify/swagger";
 import { produtoRoute } from "./routes/produtoRoute";
 import { clienteRoute } from "./routes/clienteRoute";
+import { enderecoRoute } from "./routes/enderecoRoute";
 
 const app = fastify();
 
@@ -35,6 +36,10 @@ app.register(clienteRoute, {
 
 app.register(produtoRoute, {
   prefix: "/produtos",
+});
+
+app.register(enderecoRoute, {
+  prefix: "/enderecos",
 });
 
 
