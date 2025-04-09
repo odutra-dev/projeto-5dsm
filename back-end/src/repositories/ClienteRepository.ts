@@ -1,5 +1,5 @@
 import { NovoCliente, Cliente } from "../@types/typesClientes";
-import { collection, doc, setDoc, getDocs, getDoc, updateDoc } from "firebase/firestore";
+import { collection, doc, setDoc, getDocs, getDoc, updateDoc, Timestamp } from "firebase/firestore";
 import { db } from "../firebase/firebaseConfig";
 export class ClienteRepository {
     async create(cliente: NovoCliente): Promise<Cliente> {
@@ -28,6 +28,17 @@ export class ClienteRepository {
       const clienteRef = doc(db, "clientes", clienteId);
       return await updateDoc(clienteRef, { endereco });
     }
+
+    async updatePedido(clienteId: string, pedidos: {
+      data: string;
+      horario: string;
+      tipo_entrega: string;
+      tipo_pagamento: string;
+    }) {
+      const clienteRef = doc(db, "clientes", clienteId);
+      return await updateDoc(clienteRef, { pedidos });
+    }
+
 
     async findAll(): Promise<Cliente[]> {
         const clienteCol = collection(db, "clientes");
