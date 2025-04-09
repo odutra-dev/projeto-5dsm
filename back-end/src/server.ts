@@ -6,6 +6,7 @@ import { produtoRoute } from "./routes/produtoRoute";
 import { clienteRoute } from "./routes/clienteRoute";
 import { enderecoRoute } from "./routes/enderecoRoute";
 import { categoriaRoute } from "./routes/categoriaRoute";
+import { pedidoRoute } from "./routes/pedidoRoute";
 
 const app = fastify();
 
@@ -45,6 +46,10 @@ app.register(enderecoRoute, {
 
 app.register(categoriaRoute, {
   prefix: "/categoria",
+});
+
+app.register(pedidoRoute, {
+  prefix: "/pedido",
 });
 
 
