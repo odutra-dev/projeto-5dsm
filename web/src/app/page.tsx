@@ -18,7 +18,7 @@ export default function Home() {
         <section className="w-full md:max-w-xl">
           <Link
             className="px-6 py-3 bg-primary h-12 md:h-16 text-base md:text-xl font-bold text-secondary w-full md:max-w-xl flex justify-between items-center gap-4 rounded-xl border-2 border-primary-foreground"
-            href="/"
+            href="/cardapio"
           >
             Acessar o cardápio
             <Image
