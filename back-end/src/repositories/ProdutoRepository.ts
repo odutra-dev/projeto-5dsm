@@ -1,5 +1,5 @@
 import { NovoProduto, Produto } from "../@types/typesProdutos";
-import { collection, addDoc, doc, setDoc, getDocs, getDoc } from "firebase/firestore";
+import { collection, addDoc, doc, setDoc, getDocs, getDoc, updateDoc } from "firebase/firestore";
 import { db } from "../firebase/firebaseConfig";
 
 export class ProdutoRepository {
@@ -18,6 +18,13 @@ export class ProdutoRepository {
 
         await setDoc(novaRef, novoProduto);
         return novoProduto;
+    }
+
+    async updateCategoria(produtoId: string, categoria: {
+      nome: string;
+    }) {
+      const produtoRef = doc(db, "produtos", produtoId);
+      return await updateDoc(produtoRef, { categoria });
     }
 
     async findAll(): Promise<Produto[]> {
