@@ -5,7 +5,7 @@ import { UseCaseEndereco } from "../usecases/UseCaseEndereco";
 import { ClienteRepository } from "../repositories/ClienteRepository";
 
 export async function enderecoRoute(app: FastifyInstance) {
-    const useCaseProduto = new UseCaseEndereco();
+    const useCaseEndereco = new UseCaseEndereco();
 
     app.post<{ Body: NovoEndereco }>(
         "/",
@@ -125,7 +125,7 @@ export async function enderecoRoute(app: FastifyInstance) {
             },
         }
     }, async () => {
-        return await useCaseProduto.findAll();
+        return await useCaseEndereco.findAll();
     });
 
     app.get<{ Params: { id: string } }>("/:id", {
@@ -159,7 +159,7 @@ export async function enderecoRoute(app: FastifyInstance) {
         },
     }, async (req, res) => {
         const { id } = req.params;
-        const endereco = await useCaseProduto.findById(id);
+        const endereco = await useCaseEndereco.findById(id);
         if (!endereco) return res.status(404).send({ mensagem: "Endereço não encontrado" });
         return endereco;
     });
