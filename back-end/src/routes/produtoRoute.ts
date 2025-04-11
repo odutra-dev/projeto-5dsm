@@ -16,8 +16,8 @@ export async function produtoRoute(app: FastifyInstance) {
         body: {
           type: "object",
           properties: {
-            nome: { type: "string", minLength: 3, maxLength: 100 },
-            descricao: { type: "string", minLength: 3, maxLength: 255 },
+            nome: { type: "string", minLength: 3 },
+            descricao: { type: "string", minLength: 3 },
             preco: { type: "number" },
             imagemUrl: { type: "string", format: "uri" } // ✅ campo da imagem
           },
