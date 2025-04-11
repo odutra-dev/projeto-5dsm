@@ -14,6 +14,7 @@
     "@fastify/swagger-ui": "^5.2.2",
     "@types/node": "^22.14.0",
     "back-end": "file:",
+    "expo-image-picker": "^16.0.6",
     "fastify": "^5.2.2",
     "firebase": "^11.6.0",
     "tsx": "^4.19.3",
