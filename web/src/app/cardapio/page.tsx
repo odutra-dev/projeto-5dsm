@@ -58,7 +58,7 @@ export const Cardapio = () => {
           />
         </section>
 
-        <section className="mt-8 flex gap-4">
+        <section className="mt-8 flex gap-4 w-full md:max-w-xl">
           <div className="flex flex-col items-center gap-2">
             <div className="bg-primary/30 rounded-full w-12 h-12 flex justify-center items-center border-2 border-primary">
               <Image

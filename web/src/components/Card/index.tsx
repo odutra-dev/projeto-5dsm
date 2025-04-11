@@ -13,8 +13,10 @@ export const Card = ({ nome, descricao, imagem, preco }: CardProps) => {
         className="rounded"
       />
       <div>
-        <p className="font-bold text-primary-text text-lg">{nome}</p>
-        <p className="text-quinary text-sm">{descricao}</p>
+        <p className="font-bold text-primary-text text-lg line-clamp-1">
+          {nome}
+        </p>
+        <p className="text-quinary text-sm line-clamp-3">{descricao}</p>
         <p className="font-bold text-primary-text text-xl">
           R$ {preco.toFixed(2)}
         </p>
