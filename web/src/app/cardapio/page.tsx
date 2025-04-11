@@ -1,7 +1,23 @@
+"use client";
 import Image from "next/image";
 import Link from "next/link";
+import { useEffect, useState } from "react";
+
+import { Card } from "@/components/Card";
+
+import { CardProps } from "@/@types/CardProps";
+
+import { api } from "@/services/api";
 
 export const Cardapio = () => {
+  const [produtos, setProdutos] = useState<CardProps[]>([]);
+
+  useEffect(() => {
+    api.get("/produtos").then((response) => {
+      setProdutos(response.data);
+    });
+  }, []);
+
   return (
     <>
       <header className="bg-primary h-32">
@@ -22,7 +38,7 @@ export const Cardapio = () => {
         </div>
       </header>
 
-      <main className="mt-6 flex justify-center flex-col items-center px-6 w-full">
+      <main className="my-6 flex justify-center flex-col items-center px-6 w-full">
         <section className="w-full md:max-w-xl bg-sextary h-full flex px-6 py-4 rounded-xl relative outline-hidden">
           <div className="flex flex-col gap-3">
             <div className="flex flex-col">
@@ -93,6 +109,19 @@ export const Cardapio = () => {
               Bebidas
             </p>
           </div>
+        </section>
+
+        <section className="mt-8 flex flex-col gap-4">
+          {produtos.map((produto) => (
+            <Card
+              id={produto.id}
+              key={produto.id}
+              nome={produto.nome}
+              descricao={produto.descricao}
+              imagem={produto.imagem}
+              preco={produto.preco}
+            />
+          ))}
         </section>
       </main>
     </>
