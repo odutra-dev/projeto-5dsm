@@ -7,9 +7,9 @@ export class UseCasePedido {
     constructor(){
         this.repository = new PedidoRepository();
     }
-    async create({data, horario, tipo_entrega, tipo_pagamento, clienteId}: NovoPedido): Promise<Pedido> {
-        const category = await this.repository.create({ data, horario, tipo_entrega, tipo_pagamento, clienteId});
-        return category;    
+    async create({data, horario, tipo_entrega, tipo_pagamento, clienteId, produtos}: NovoPedido): Promise<Pedido> {
+        const pedido = await this.repository.create({ data, horario, tipo_entrega, tipo_pagamento, clienteId, produtos});
+        return pedido;    
     }
 
     async findAll(): Promise<Pedido[]> {

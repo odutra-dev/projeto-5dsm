@@ -39,17 +39,12 @@ export class ProdutoRepository {
         return produtos;
       }
     
-      async findById(id: string): Promise<Produto | null> {
-        const docRef = doc(db, "produtos", id);
-        const snap = await getDoc(docRef);
-    
-        if (snap.exists()) {
-          return {
-            id: snap.id,
-            ...(snap.data() as Omit<Produto, "id">)
-          };
-        }
-        
-        return null;
+      async findById(produtoId: string): Promise<{ nome: string } | null> {
+        const ref = doc(db, "produtos", produtoId);
+        const snap = await getDoc(ref);
+        if (!snap.exists()) return null;
+        const data = snap.data();
+        return { nome: data.nome };
       }
+      
     }

@@ -1,4 +1,4 @@
-// routes.ts
+// pedidoRoute.ts
 import { FastifyInstance } from "fastify";
 import { UseCasePedido } from "../usecases/UseCasePedido";
 import { ClienteRepository } from "../repositories/ClienteRepository";
@@ -6,93 +6,111 @@ import { NovoPedido } from "../@types/typesPedidos";
 
 export async function pedidoRoute(app: FastifyInstance) {
   const useCasePedido = new UseCasePedido();
+  const clienteRepository = new ClienteRepository();
 
-  app.post<{ Body: NovoPedido }>(
-    "/",
-    {
-      schema: {
-        tags: ["Pedido"],
-        description: "Cria um novo pedido",
-        body: {
+  app.post<{ Body: NovoPedido }>("/", {
+    schema: {
+      tags: ["Pedido"],
+      description: "Cria um novo pedido com produtos",
+      body: {
+        type: "object",
+        properties: {
+          data: { type: "string", format: "date" },
+          horario: { type: "string", format: "date-time" },
+          tipo_entrega: { type: "string", minLength: 3, maxLength: 255 },
+          tipo_pagamento: { type: "string", minLength: 3, maxLength: 255 },
+          clienteId: { type: "string", minLength: 1 },
+          produtos: {
+            type: "array",
+            items: {
+              type: "object",
+              properties: {
+                produtoId: { type: "string" },
+                quantidade: { type: "number", minimum: 1 }
+              },
+              required: ["produtoId", "quantidade"]
+            },
+            minItems: 1
+          }
+        },
+        required: [
+          "data",
+          "horario",
+          "tipo_entrega",
+          "tipo_pagamento",
+          "clienteId",
+          "produtos"
+        ]
+      },
+      response: {
+        201: {
           type: "object",
           properties: {
-            data: {
-              type: "string",
-              format: "date", // apenas data (ex: 2025-04-09)
-              minLength: 3,
-              maxLength: 100,
-            },
-            horario: {
-              type: "string",
-              format: "date-time", // inclui hora (ex: 2025-04-09T12:30:00Z)
-              minLength: 3,
-              maxLength: 255,
-            },
-            tipo_entrega: {
-              type: "string",
-              minLength: 3,
-              maxLength: 255,
-            },
-            tipo_pagamento: {
-              type: "string",
-              minLength: 3,
-              maxLength: 255,
-            },
-            clienteId: {
-              type: "string",
-              minLength: 1,
-            },
-          },
-          required: ["data", "horario", "tipo_entrega", "tipo_pagamento", "clienteId"],
-        },
-        response: {
-          201: {
-            type: "object",
-            properties: {
-              id: { type: "string" },
-              data: { type: "string", format: "date" },
-              horario: { type: "string", format: "date-time" },
-              tipo_entrega: { type: "string" },
-              tipo_pagamento: { type: "string" },
-              clienteId: { type: "string" },
-            },
-          },
-        },
-      },
-    },
-    async (request, reply) => {
-      const clienteRepository = new ClienteRepository();
-
-      try {
-        const { data, horario, tipo_entrega, tipo_pagamento, clienteId } = request.body;
-
-        const clienteExiste = await clienteRepository.findById(clienteId);
-        if (!clienteExiste) {
-          return reply.status(404).send({ mensagem: "Cliente não encontrado" });
+            id: { type: "string" },
+            data: { type: "string", format: "date" },
+            horario: { type: "string", format: "date-time" },
+            tipo_entrega: { type: "string" },
+            tipo_pagamento: { type: "string" },
+            clienteId: { type: "string" },
+            produtos: {
+              type: "array",
+              items: {
+                type: "object",
+                properties: {
+                  produtoId: { type: "string" },
+                  quantidade: { type: "number" }
+                }
+              }
+            }
+          }
         }
-
+      }
+    },
+  
+    handler: async (request, reply) => {
+      const {
+        data,
+        horario,
+        tipo_entrega,
+        tipo_pagamento,
+        clienteId,
+        produtos
+      } = request.body;
+  
+      const clienteExiste = await clienteRepository.findById(clienteId);
+      if (!clienteExiste) {
+        return reply.status(404).send({ mensagem: "Cliente não encontrado" });
+      }
+  
+      try {
+        // Cria o pedido no banco principal
         const pedido = await useCasePedido.create({
           data,
           horario,
           tipo_entrega,
           tipo_pagamento,
           clienteId,
+          produtos // apenas com produtoId e quantidade
         });
-
-        await clienteRepository.updatePedido(clienteId, {
+  
+        // Cria subdocumento dentro do cliente
+        await clienteRepository.addPedidoSubdocument(clienteId, {
+          pedidoId: pedido.id,
           data,
           horario,
           tipo_entrega,
           tipo_pagamento,
+          produtos
         });
-
+  
         return reply.status(201).send(pedido);
       } catch (error) {
-        console.log(error);
-        return reply.status(500).send({ message: error });
+        console.error(error);
+        return reply.status(500).send({ message: "Erro ao criar pedido" });
       }
     }
-  );
+  });
+  
 
   // GET - Listar todos os pedidos
   app.get("/", {
@@ -116,8 +134,9 @@ export async function pedidoRoute(app: FastifyInstance) {
         },
       },
     },
-  }, async () => {
-    return await useCasePedido.findAll();
+    handler: async () => {
+      return await useCasePedido.findAll();
+    },
   });
 
   // GET - Buscar pedido por ID
@@ -152,12 +171,13 @@ export async function pedidoRoute(app: FastifyInstance) {
         },
       },
     },
-  }, async (req, res) => {
-    const { id } = req.params;
-    const pedido = await useCasePedido.findById(id);
-    if (!pedido) {
-      return res.status(404).send({ mensagem: "Pedido não encontrado" });
-    }
-    return pedido;
+    handler: async (req, res) => {
+      const { id } = req.params;
+      const pedido = await useCasePedido.findById(id);
+      if (!pedido) {
+        return res.status(404).send({ mensagem: "Pedido não encontrado" });
+      }
+      return pedido;
+    },
   });
 }
