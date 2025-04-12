@@ -3,7 +3,7 @@ import { NovoProduto } from "../@types/typesProdutos";
 import { UseCaseProduto } from "../usecases/UseCaseProduto";
 import { pipeline } from 'stream';
 import { promisify } from 'util';
-import path from "path";
+import path, { format } from "path";
 import * as fs from "fs"; // Importando corretamente a biblioteca fs
 import { MultipartFile } from "@fastify/multipart";
 
@@ -17,16 +17,16 @@ export async function produtoRoute(app: FastifyInstance) {
       tags: ["Produto"],
       description: "Cria um novo produto (JSON ou form-data com imagem)",
       consumes: ["multipart/form-data"],
-       body: {
+/*        body: {
         type: "object",
         properties: {
           nome: { type: "string" },
           descricao: { type: "string" },
-          preco: { type: "string" },
+          preco: { type: "string", pattern: "^[0-9]+(\\.[0-9]{1,2})?$" },
           file: { type: "string", format: "binary" }
         },
         required: ["nome", "descricao", "preco"]
-      },       
+      },    */    
       
       response: {
         201: {
