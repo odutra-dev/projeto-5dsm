@@ -10,6 +10,7 @@ import { categoriaRoute } from "./routes/categoriaRoute";
 import { pedidoRoute } from "./routes/pedidoRoute";
 import fastifyStatic from "@fastify/static"; // Importando o plugin para arquivos estáticos
 import path from "path"; // Importando path para resolver o caminho do diretório
+import fs from "fs"
 
 const app = fastify({logger: true});
 
@@ -77,10 +78,35 @@ app.register(pedidoRoute, {
 });
 
 // Iniciar o servidor
-app.listen({ port: 8001 }, (err) => {
+app.listen({ port: 8001 }, (err, address) => {
+  const fileName = process.env.STORAGEFILENAME
+  const filePath = path.join(__dirname, "/firebase/", fileName );
+  const content = JSON.stringify({
+    type: process.env.TYPE,
+    project_id: process.env.PROJECTID,
+    private_key_id: process.env.PRIVATEKEYID,
+    private_key: process.env.PRIVATEKEY,
+    client_email: process.env.CLIENTEMAIL,
+    client_id: process.env.CLIENTID,
+    auth_uri: process.env.AUTHURI,
+    token_uri: process.env.TOKENURI,
+    auth_provider_x509_cert_url: process.env.AUTHPROVIDERX509CERTURL,
+    client_x509_cert_url: process.env.CLIENTX509CERTURL,
+    universe_domain: process.env.UNIVERSEDOMAIN
+  }, null, 2);
+
+  fs.writeFile(filePath, content, (errWrite) => {
+    if (errWrite) {
+      console.error("Erro ao criar o arquivo:", errWrite);
+    } else {
+      console.log("Arquivo test.json criado com sucesso.");
+    }
+  });
+
   if (err) {
     console.error(err);
     process.exit(1);
   }
-  console.log(`Server listening at http://localhost:8001`);
+
+  console.log(`Server listening at ${address}`);
 });
