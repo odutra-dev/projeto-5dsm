@@ -12,97 +12,86 @@ export async function produtoRoute(app: FastifyInstance) {
   const pump = promisify(pipeline);
 
   // POST - Criar produto com JSON ou upload de imagem
-  app.post<{ Body: NovoProduto }>(
-    "/",
-    {
-      schema: {
-        tags: ["Produto"],
-        description: "Cria um novo produto (via form-data)",
-        consumes: ["multipart/form-data"],
-        /* body: {
+  app.post<{ Body: NovoProduto }>("/", {
+    schema: {
+      tags: ["Produto"],
+      description: "Cria um novo produto (JSON ou form-data com imagem)",
+      consumes: ["multipart/form-data"],
+       body: {
+        type: "object",
+        properties: {
+          nome: { type: "string" },
+          descricao: { type: "string" },
+          preco: { type: "string" },
+          file: { type: "string", format: "binary" }
+        },
+        required: ["nome", "descricao", "preco"]
+      },       
+      
+      response: {
+        201: {
           type: "object",
           properties: {
+            id: { type: "string" },
             nome: { type: "string" },
             descricao: { type: "string" },
-            preco: { type: "string" },
-            file: { type: "string", format: "binary" }
+            preco: { type: "number" },
+            imagemUrl: { type: "string" }
           }
-        }, */
-        response: {
-          201: {
-            type: "object",
-            properties: {
-              id: { type: "string" },
-              nome: { type: "string" },
-              descricao: { type: "string" },
-              preco: { type: "number" },
-              imagemUrl: { type: "string" }
-            }
-          }
-        }
-      },
-    },
-    async (request, reply) => {
-      const contentType = request.headers["content-type"] || "";
-  
-      // --- JSON comum ---
-      if (contentType.includes("application/json")) {
-        const { nome, descricao, preco, imagemUrl } = request.body as NovoProduto;
-  
-        if (!nome || !descricao || !preco) {
-          return reply.status(400).send({ message: "Campos obrigatórios faltando." });
-        }
-  
-        try {
-          const produto = await useCaseProduto.create({ nome, descricao, preco, imagemUrl });
-          return reply.status(201).send(produto);
-        } catch (error) {
-          console.error(error);
-          return reply.status(500).send({ message: "Erro ao criar produto." });
         }
       }
+    },
+    attachValidation: false
+  }, async (request, reply) => {
+    const contentType = request.headers["content-type"] || "";
+    let nome = "", descricao = "", preco: number = 0, imagemUrl = "";
   
-      // --- multipart/form-data com upload ---
-      if (contentType.includes("multipart/form-data")) {
+    try {
+      if (contentType.includes("application/json")) {
+        const body = request.body as NovoProduto;
+  
+        nome = body.nome;
+        descricao = body.descricao;
+        preco = Number(body.preco);
+        imagemUrl = body.imagemUrl || "";
+  
+      } else if (contentType.includes("multipart/form-data")) {
         const data: Record<string, any> = {};
-        let imagemUrl = "";
-  
         const parts = request.parts();
   
         for await (const part of parts) {
           if (part.type === "file") {
             const file = part as MultipartFile;
-            const filename = `${Date.now()}-${part.fieldname}`;
+            const filename = `${Date.now()}-${file.filename}`;
             const filepath = path.join(__dirname, "..", "uploads", filename);
-  
             await pump(file.file, fs.createWriteStream(filepath));
             imagemUrl = `/uploads/${filename}`;
           } else if (part.type === "field") {
-            data[part.fieldname] = part.value as string;
+            data[part.fieldname] = part.value;
           }
         }
   
-        if (!data.nome || !data.descricao || !data.preco || !imagemUrl) {
-          return reply.status(400).send({ message: "Campos obrigatórios faltando." });
-        }
-  
-        try {
-          const produto = await useCaseProduto.create({
-            nome: data.nome,
-            descricao: data.descricao,
-            preco: Number(data.preco),
-            imagemUrl
-          });
-          return reply.status(201).send(produto);
-        } catch (error) {
-          console.error(error);
-          return reply.status(500).send({ message: "Erro ao criar produto." });
-        }
+        nome = data.nome;
+        descricao = data.descricao;
+        preco = Number(data.preco);
+      } else {
+        return reply.status(400).send({ message: "Tipo de conteúdo inválido." });
       }
   
-      return reply.status(400).send({ message: "Tipo de conteúdo inválido." });
+      // Validação comum
+      if (!nome || !descricao || !preco) {
+        return reply.status(400).send({ message: "Campos obrigatórios faltando." });
+      }
+  
+      const produto = await useCaseProduto.create({ nome, descricao, preco, imagemUrl });
+      return reply.status(201).send(produto);
+  
+    } catch (error) {
+      console.error(error);
+      return reply.status(500).send({ message: "Erro ao criar produto." });
     }
-  );
+  });
+  
 
   // GET - Listar todos os produtos
   app.get("/", {

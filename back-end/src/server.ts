@@ -11,10 +11,12 @@ import { pedidoRoute } from "./routes/pedidoRoute";
 import fastifyStatic from "@fastify/static"; // Importando o plugin para arquivos estáticos
 import path from "path"; // Importando path para resolver o caminho do diretório
 
-const app = fastify();
+const app = fastify({logger: true});
 
 // Registro de plugins
 app.register(cors);
+
+
 app.register(fastifyMultipart, {
   limits: {
     fieldNameSize: 100, // Max field name size in bytes
