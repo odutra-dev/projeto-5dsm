@@ -10,5 +10,5 @@ export type NovoProduto = {
   nome: string;
   descricao: string;
   preco: number;
-  imagemUrl: string; // <-- também aqui ao criar
+  imagemUrl?: string; // <-- também aqui ao criar
 };
