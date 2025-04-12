@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "geladinho-santos",
+  "private_key_id": "cfaed9d7b2c79c8f91c83f43f40fe26a4e4eadc2",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvwIBADANBgkqhkiG9w0BAQEFAASCBKkwggSlAgEAAoIBAQCqmimH+/PdckEp\nfg/aLRrh0nQodLQqLnvyLsL3rdZy671qPLNI6rFvyMPTm8rj7NLpv75qCeyaJ6TL\n+QfMkurUwIA10+6XetRokyvu/ctOVkQDCJ91mI26jkPW5Z4noZLtK61xFxVu+SlM\n1qEWjBfj3xxG1HTEq2rey4dazCGmGIrXIzhFIzmUFCkrAlyCutvDgsHrA+g0Y4gT\nSHpjsnavdNSVnKeBYJ1sHagMmm8Hbtzg+eBYWyfN8fPTgEP/xTwYGdXg40/iU27t\nORXY61jHIIQeYqw//TIvIj1/rPBvfiwhmrQqKsJO203+7aj8avV1hpmtahBZ2/d7\n9ohWORUBAgMBAAECggEAEBvLm1yTzZdz1etCa61J3iQJJgdD+j4mo6rc67ZROwtt\nmI4H9zT64VVVgUHy/cO/NAVQAVLz0Wf4IG7gmMVQEVvmVz7ORuUZEJFB6xhxdZGB\nbUBnjxrjGggEGZLXlMIlvYl74GNnuZFjAA99iSOb/18SHFGD/4x4hDY3TwBaloRP\nsPO3ZV6vaw+GRPm94qASrSOqASfYIQy73SepO2myK6wbpOxM2IDgQwVoew+fYS6U\nuoIDegCp24G7yAIkL4YmdelZ8aqGPo6ok8DOgvIdwa8WywzisaDmGHHSHVhop2Gr\nsNPTew2ZvDX0/RbO6s9Qh+ati9oWYZ5wi0wULpXWuQKBgQDtd1XrtFeiCCA1W5QS\ncN84H2QGYlwLngT3S5/JTOaOZXGnVGJDaCnmNklev0lr8Y/gCIyUUVL6UCClbnMU\n1KAVYV7akk15+a3/wFkaMQWOl6gFCHF1KjLf0/p5F0iRm1Bd9nN4w2NI7dDPe3AT\nkJgheTMto6eODKkKESq2ovYieQKBgQC36tv0kvwIvouMPdiAR5vtj0lni6lIRYSs\n97AfTLbguqZzB0gv3gE1bDZ8vGpRMa7wzZ6Vk6LX9UISqZ/vStH/wbIpEO+EpS6B\nul+8nm8ozPs4Uo6Ik9BM+WMUECunHYOD0TRtMIeuQdXRPD685fvCbkz7G7wJDJee\njUR2x1ckyQKBgQDQ0dMlveYeH6UrJsgUW1t//+K21oH42VGmocL2gwBwEfca3VK3\n0f6eafilL/OBz9/kc8AjoUwlwJakw3bBx6SqiICgFm25KH4BXAU+ygMH/IcNPfp/\nvMcWG1O0bmwrVvgaWOH8PV2uwSqRegv5uHp/XRRLOxHaEXoI10XHa5CkiQKBgQCc\nsvAhG7K9SIvhOzhhY6HI8BJctLPQrdpy/L4EjPor0xvKWeP5VK+28rIh6O60qx4g\ncTCyxI00bvSSrg9kdF0kCcZgEtvgKlTLlx3GuT6AhtVskXp7h2UskDcIexaWViEd\niHugpH6Vy+X/VdMmYtT0PcI9GM5G74GnRzmT8hefcQKBgQCdvJt38qtzv8IJfZwk\nXC4VL1Atni/TjnM5rG1NgkL35S4M2opDETAq/irqXsasrdvHPV3tHTwZkvLrBoff\n47N/qd/7+NJDITC65pRpUEXxCA1CB4Ja3csyAVM4Gvlh+LtQQbGFzk+3qd6zjzUV\nwMseBSzfT+J/4h+za7Of2P7orA==\n-----END PRIVATE KEY-----\n",
+  "client_email": "firebase-adminsdk-fbsvc@geladinho-santos.iam.gserviceaccount.com",
+  "client_id": "114350402264296338729",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-fbsvc%40geladinho-santos.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}
