@@ -9,16 +9,16 @@ O projeto Geladinho Santista consiste em um sistema digital dividido em duas par
 
 ## Tecnologias Utilizadas
 
-- **Front-end Web**: (Tecnologias utilizadas na parte da web)
-- **Front-end Mobile**: React Native
-- **Back-end**: Node.js (API RESTful)
-- **Banco de Dados**: PostgreSQL
+- **Front-end Web**: NextJS (React)
+- **Front-end Mobile**: Expo (React Native)
+- **Back-end**: Node.js com fastify (API RESTful)
+- **Banco de Dados**: Firebase
 - **Machine Learning**: Algoritmo para recomendações personalizadas
 - **Hospedagem**: AWS ou Vercel
 
 ## Funcionalidades
 
-- **Cardápio Digital**: Acesso rápido via QR Code.
+- **Cardápio Digital**: Acesso rápido a cardápio.
 - **Painel Administrativo**: Gestão de pedidos, estoque e relatórios.
 - **Recomendações Personalizadas**: Sugestões baseadas no histórico de compras.
 - **Integração com WhatsApp**: Automação na comunicação e pedidos.
