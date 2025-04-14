@@ -3,7 +3,7 @@ import Image from "next/image";
 
 import { useEffect, useState } from "react";
 
-import { Card } from "@/components/Card";
+import { Card } from "@/components/CardProduto";
 
 import { CardProps } from "@/@types/CardProps";
 
