@@ -1,6 +1,6 @@
 "use client";
 import Image from "next/image";
-import Link from "next/link";
+
 import { useEffect, useState } from "react";
 
 import { Card } from "@/components/Card";
@@ -8,6 +8,7 @@ import { Card } from "@/components/Card";
 import { CardProps } from "@/@types/CardProps";
 
 import { api } from "@/services/api";
+import Header from "@/components/Header";
 
 export const Cardapio = () => {
   const [produtos, setProdutos] = useState<CardProps[]>([]);
@@ -21,23 +22,13 @@ export const Cardapio = () => {
 
   return (
     <>
-      <header className="bg-primary h-32">
-        <div className="flex justify-between items-center px-6 md:px-12 h-full">
-          <h1 className="text-3xl font-bold text-secondary">Cardápio</h1>
-          <Link
-            href="/"
-            className="cursor-pointer w-12 h-12 rounded-full bg-primary-foreground border-1 border-primary-text flex justify-center items-center"
-          >
-            <Image
-              className=""
-              src="/close.svg"
-              alt="Geladinho Santista"
-              width={24}
-              height={24}
-            />
-          </Link>
-        </div>
-      </header>
+      <Header
+        icon="close"
+        title="Cardápio"
+        icon2="shop"
+        link="/"
+        link2="/carrinho"
+      />
 
       <main className="my-6 flex justify-center flex-col items-center px-6 w-full">
         <section className="w-full md:max-w-xl bg-sextary h-full flex px-6 py-4 rounded-xl relative outline-hidden">

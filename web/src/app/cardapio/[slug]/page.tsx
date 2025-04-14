@@ -1,9 +1,9 @@
 import Image from "next/image";
-import Link from "next/link";
 
 import { api } from "@/services/api";
 
 import { CardProps } from "@/@types/CardProps";
+import Header from "@/components/Header";
 
 export default async function Page({
   params,
@@ -16,40 +16,18 @@ export default async function Page({
 
   return (
     <>
-      <header className="bg-primary h-32">
-        <div className="flex justify-between items-center px-6 md:px-12 h-full">
-          <Link
-            href="/cardapio"
-            className="cursor-pointer w-12 h-12 rounded-full bg-primary-foreground border-1 border-primary-text flex justify-center items-center"
-          >
-            <Image
-              className="w-6 h-6"
-              src="/back.svg"
-              alt="Carrinho de compras"
-              width={24}
-              height={24}
-            />
-          </Link>
-          <h1 className="text-3xl font-bold text-secondary">Detalhes</h1>
-          <Link
-            href="/carrinho"
-            className="cursor-pointer w-12 h-12 rounded-full bg-primary-foreground border-1 border-primary-text flex justify-center items-center"
-          >
-            <Image
-              className=""
-              src="/shop.svg"
-              alt="Carrinho de compras"
-              width={24}
-              height={24}
-            />
-          </Link>
-        </div>
-      </header>
+      <Header
+        icon="back"
+        title="Detalhes"
+        icon2="shop"
+        link="/cardapio"
+        link2="/carrinho"
+      />
 
       <main className="relative flex justify-center flex-col items-center px-6 w-full">
         <section className="w-full md:max-w-xl flex flex-col items-center justify-center">
           <Image
-            src={data?.imagem}
+            src={data?.imagemUrl}
             alt={data?.nome}
             width={1200}
             height={600}
