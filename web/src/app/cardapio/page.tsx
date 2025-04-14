@@ -15,6 +15,7 @@ export const Cardapio = () => {
   useEffect(() => {
     api.get("/produtos").then((response) => {
       setProdutos(response.data);
+      console.log(response.data);
     });
   }, []);
 
@@ -118,7 +119,7 @@ export const Cardapio = () => {
               key={produto.id}
               nome={produto.nome}
               descricao={produto.descricao}
-              imagem={produto.imagem}
+              imagemUrl={produto.imagemUrl}
               preco={produto.preco}
             />
           ))}

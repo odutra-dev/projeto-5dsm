@@ -3,20 +3,20 @@ import Image from "next/image";
 import { CardProps } from "@/@types/CardProps";
 import Link from "next/link";
 
-export const Card = ({ id, nome, descricao, imagem, preco }: CardProps) => {
+export const Card = ({ id, nome, descricao, imagemUrl, preco }: CardProps) => {
   return (
     <Link
       href={`/cardapio/${id}`}
       className="flex bg-sextary/30 rounded-xl border-1 border-primary-text p-4 gap-4"
     >
       <Image
-        src={imagem}
+        src={imagemUrl}
         alt={nome}
-        width={100}
-        height={100}
-        className="rounded"
+        width={120}
+        height={120}
+        className="rounded-xl w-32 h-32 object-cover"
       />
-      <div>
+      <div className="flex flex-col justify-between w-full">
         <p className="font-bold text-primary-text text-lg line-clamp-1">
           {nome}
         </p>
