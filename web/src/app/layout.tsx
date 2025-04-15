@@ -1,0 +1,29 @@
+import type { Metadata } from "next";
+import { Nunito } from "next/font/google";
+import "./globals.css";
+
+const nunitoSans = Nunito({
+  variable: "--font-nunito-sans",
+  subsets: ["latin"],
+});
+
+export const metadata: Metadata = {
+  title: "Geladinho Santista",
+  description: "Sobresas de Geladinho Santista",
+};
+
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
+  return (
+    <html lang="en">
+      <body
+        className={`${nunitoSans.variable} font-sans antialiased bg-secondary`}
+      >
+        {children}
+      </body>
+    </html>
+  );
+}

@@ -1,0 +1,27 @@
+{
+  "name": "back-end",
+  "version": "1.0.0",
+  "description": "Essa parte do projeto é a parte que comunica com o banco de dados.",
+  "main": "index.js",
+  "scripts": {
+    "dev": "tsx watch --env-file .env src/server.ts"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@fastify/cors": "^11.0.1",
+    "@fastify/multipart": "^9.0.3",
+    "@fastify/swagger": "^9.4.2",
+    "@fastify/swagger-ui": "^5.2.2",
+    "back-end": "file:",
+    "expo-image-picker": "^16.0.6",
+    "fastify": "^5.2.2",
+    "firebase": "^11.6.0",
+    "firebase-admin": "^13.2.0",
+    "tsx": "^4.19.3",
+    "typescript": "^5.8.2"
+  },
+  "devDependencies": {
+    "@types/node": "^22.14.1"
+  }
+}
