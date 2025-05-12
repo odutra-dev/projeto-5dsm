@@ -58,7 +58,7 @@ export default async function Page({
                 type="number"
                 disabled
                 value={1}
-                className="bg-sextary/30 p-3.5 md:p-4 border-1 border-primary-text rounded w-12 h-12 text-center md:w-16 md:h-16 text-primary-text font-bold text-xl md:text-2xl"
+                className="bg-sextary/30 p-3.5 md:p-4 border-1 border-primary-text rounded w-14 h-14 text-center md:w-16 md:h-16 text-primary-text font-bold text-xl md:text-2xl"
               />
               <a className="cursor-pointer w-12 h-12 rounded-full bg-primary-foreground border-1 border-primary-text flex justify-center items-center">
                 <Image
