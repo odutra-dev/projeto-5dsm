@@ -5,9 +5,9 @@ import Image from "next/image";
 type HeaderProps = {
   icon: string;
   title: string;
-  icon2: string;
+  icon2?: string;
   link: string;
-  link2: string;
+  link2?: string;
 };
 
 export default function Header(props: HeaderProps) {
@@ -27,18 +27,22 @@ export default function Header(props: HeaderProps) {
           />
         </Link>
         <h1 className="text-3xl font-bold text-secondary">{props.title}</h1>
-        <Link
-          href={props.link2}
-          className="cursor-pointer w-12 h-12 rounded-full bg-primary-foreground border-1 border-primary-text flex justify-center items-center"
-        >
-          <Image
-            className=""
-            src={"/" + props.icon2 + ".svg"}
-            alt="Carrinho de compras"
-            width={24}
-            height={24}
-          />
-        </Link>
+        {props.link2 ? (
+          <Link
+            href={props.link2}
+            className="cursor-pointer w-12 h-12 rounded-full bg-primary-foreground border-1 border-primary-text flex justify-center items-center"
+          >
+            <Image
+              className=""
+              src={"/" + props.icon2 + ".svg"}
+              alt="Carrinho de compras"
+              width={24}
+              height={24}
+            />
+          </Link>
+        ) : (
+          <div className="w-12 h-12"></div>
+        )}
       </div>
     </header>
   );
