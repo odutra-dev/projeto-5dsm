@@ -41,7 +41,7 @@ export default function Header(props: HeaderProps) {
             />
           </Link>
         ) : (
-          <div className="w-12 h-12"></div>
+          <div className="w-1 h-1"></div>
         )}
       </div>
     </header>
