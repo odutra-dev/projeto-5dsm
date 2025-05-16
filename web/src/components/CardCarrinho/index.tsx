@@ -4,7 +4,7 @@ import { CardProps } from "@/@types/CardProps";
 
 export const CardCarrinho = ({ nome, imagemUrl, preco }: CardProps) => {
   return (
-    <div className="flex bg-sextary/30 rounded-xl border-1 border-primary-text p-4 gap-4 relative">
+    <div className="flex bg-sextary/30 rounded-xl border-1 border-primary-text p-4 gap-4 relative mt-8">
       <Image
         src={imagemUrl}
         alt={nome}
