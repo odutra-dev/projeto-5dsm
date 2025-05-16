@@ -5,7 +5,13 @@ import Image from "next/image";
 export const Carrinho = () => {
   return (
     <>
-      <Header icon="back" title="Carrinho" link="/" />
+      <Header
+        icon="back"
+        title="Carrinho"
+        icon2="shop"
+        link="/"
+        link2="/cardapio"
+      />
 
       <main className=" flex justify-center flex-col items-center px-6 w-full">
         <CardCarrinho
