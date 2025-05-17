@@ -4,7 +4,7 @@ import { CardProps } from "@/@types/CardProps";
 
 export const CardCarrinho = ({ nome, imagemUrl, preco }: CardProps) => {
   return (
-    <div className="flex bg-sextary/30 rounded-xl border-1 border-primary-text p-4 gap-4 relative">
+    <div className="flex bg-sextary/30 rounded-xl border-1 border-primary-text p-4 gap-4 relative mt-8">
       <Image
         src={imagemUrl}
         alt={nome}
@@ -49,20 +49,11 @@ export const CardCarrinho = ({ nome, imagemUrl, preco }: CardProps) => {
         </div>
       </div>
       <div className="absolute top-0 right-0 flex gap-2 -translate-y-1/2">
-        <a className="cursor-pointer w-12 h-12 rounded-full bg-settinary border-1 border-settinary-foreground flex justify-center items-center">
-          <Image
-            className=""
-            src="/edit.svg"
-            alt="Carrinho de compras"
-            width={24}
-            height={24}
-          />
-        </a>
-        <a className="cursor-pointer w-12 h-12 rounded-full bg-settinary border-1 border-settinary-foreground flex justify-center items-center">
+        <a className="cursor-pointer w-12 h-12 rounded-full bg-settinary border-2 border-settinary-foreground flex justify-center items-center">
           <Image
             className=""
             src="/trash.svg"
-            alt="Carrinho de compras"
+            alt="excluir do carrinho"
             width={24}
             height={24}
           />
