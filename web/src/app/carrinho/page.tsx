@@ -1,8 +1,13 @@
+"use client";
 import { CardCarrinho } from "@/components/CardCarrinho";
 import Header from "@/components/Header";
 import Image from "next/image";
 
+import { useCarrinho } from "@/context/carrinho";
+
 export const Carrinho = () => {
+  const { carrinho } = useCarrinho();
+
   return (
     <>
       <Header
@@ -14,13 +19,16 @@ export const Carrinho = () => {
       />
 
       <main className=" flex justify-center flex-col items-center px-6 w-full">
-        <CardCarrinho
-          id="1"
-          nome="Coca-Cola"
-          preco={5.99}
-          imagemUrl=""
-          descricao=""
-        />
+        {carrinho.map((item) => (
+          <CardCarrinho
+            key={item.id}
+            id={item.id}
+            nome={item.nome}
+            imagemUrl={item.imagemUrl}
+            preco={item.preco}
+            quantidade={item.quantidade || 1}
+          />
+        ))}
 
         <div className="mt-6 w-full md:max-w-xl flex flex-col rounded-2xl justify-center bg-primary/30 border-1 border-primary-text p-4 gap-4">
           <h2 className="text-center font-bold text-primary-text text-2xl">
