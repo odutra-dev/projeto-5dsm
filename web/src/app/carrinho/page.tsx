@@ -4,9 +4,11 @@ import Header from "@/components/Header";
 import Image from "next/image";
 import { useCarrinho } from "@/context/carrinho";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 export const Carrinho = () => {
   const { carrinho } = useCarrinho();
+  const router = useRouter();
 
   const [metodoPagamento, setMetodoPagamento] = useState<string>("Dinheiro");
   const [metodoEntrega, setMetodoEntrega] = useState<string>("Delivery");
@@ -21,6 +23,38 @@ export const Carrinho = () => {
 
   const taxaEntrega = metodoEntrega === "Delivery" ? 5 : 0;
   const total = subtotal + taxaEntrega;
+
+  const handleFinalizarPedido = () => {
+    if (carrinho.length === 0) {
+      alert("Seu carrinho está vazio!");
+      return;
+    }
+
+    if (metodoEntrega === "Delivery") {
+      router.push("/entrega");
+    } else {
+      const mensagem = encodeURIComponent(`
+Novo Pedido:
+${carrinho
+  .map(
+    (item) =>
+      `- ${item.nome} (x${item.quantidade || 1}) - R$ ${(
+        item.preco * (item.quantidade || 1)
+      ).toFixed(2)}`
+  )
+  .join("\n")}
+
+Total: R$ ${total.toFixed(2)}
+Pagamento: ${metodoPagamento}
+Entrega: ${metodoEntrega}
+      `);
+
+      const numeroWhatsApp = process.env.NEXT_PUBLIC_WHATSAPP;
+      const urlWhatsApp = `https://wa.me/${numeroWhatsApp}?text=${mensagem}`;
+
+      window.open(urlWhatsApp, "_blank");
+    }
+  };
 
   return (
     <>
@@ -128,15 +162,18 @@ export const Carrinho = () => {
           ))}
         </div>
 
-        <a className="flex justify-center items-center gap-4 mb-6 w-full md:max-w-xl h-12 md:h-16 bg-primary border-2 border-primary-foreground rounded-2xl text-secondary font-bold text-xl md:text-2xl">
-          Finalizar pedido
+        <button
+          onClick={handleFinalizarPedido}
+          className="flex justify-center items-center gap-4 mb-6 w-full md:max-w-xl h-12 md:h-16 bg-primary border-2 border-primary-foreground rounded-2xl text-secondary font-bold text-xl md:text-2xl"
+        >
+          Finalizar Pedido
           <Image
             src="/seta.svg"
             alt="seta que aponta para a direita"
             width={16}
             height={16}
           />
-        </a>
+        </button>
       </main>
     </>
   );
