@@ -1,8 +1,14 @@
 import Image from "next/image";
 
-import { CardProps } from "@/@types/CardProps";
+type CardCarrinhoProps = {
+  id: string;
+  nome: string;
+  imagemUrl: string;
+  preco: number;
+  quantidade: number;
+};
 
-export const CardCarrinho = ({ nome, imagemUrl, preco }: CardProps) => {
+export const CardCarrinho = ({ nome, imagemUrl, preco }: CardCarrinhoProps) => {
   return (
     <div className="flex bg-sextary/30 rounded-xl border-1 border-primary-text p-4 gap-4 relative mt-8">
       <Image
