@@ -14,6 +14,14 @@ export const Carrinho = () => {
   const metodosPagamento = ["Dinheiro", "Débito", "Crédito", "Pix"];
   const metodosEntrega = ["Delivery", "Retirada"];
 
+  const subtotal = carrinho.reduce(
+    (acc, item) => acc + item.preco * (item.quantidade || 1),
+    0
+  );
+
+  const taxaEntrega = metodoEntrega === "Delivery" ? 5 : 0;
+  const total = subtotal + taxaEntrega;
+
   return (
     <>
       <Header
@@ -42,32 +50,16 @@ export const Carrinho = () => {
           </h2>
           <div className="text-primary-text flex justify-between">
             <p>Subtotal:</p>
-            <p>
-              R$
-              {carrinho
-                .reduce(
-                  (acc, item) => acc + item.preco * (item.quantidade || 1),
-                  0
-                )
-                .toFixed(2)}
-            </p>
+            <p>R$ {subtotal.toFixed(2)}</p>
           </div>
           <div className="text-primary-text flex justify-between">
             <p>Taxa de entrega:</p>
-            <p>{metodoEntrega === "Delivery" ? "R$ 5,00" : "R$ 0,00"}</p>
+            <p>R$ {taxaEntrega.toFixed(2)}</p>
           </div>
           <hr className="w-full border-1 border-primary border-dashed" />
           <div className="text-primary-text font-bold flex justify-between">
             <p>Total:</p>
-            <p>
-              R${" "}
-              {carrinho
-                .reduce(
-                  (acc, item) => acc + item.preco * (item.quantidade || 1),
-                  0
-                )
-                .toFixed(2)}
-            </p>
+            <p>R$ {total.toFixed(2)}</p>
           </div>
         </div>
 
@@ -88,21 +80,16 @@ export const Carrinho = () => {
                       : "text-primary-text"
                   }`}
               >
-                {metodoPagamento === metodo ? (
-                  <Image
-                    src={metodo + "-selected.svg"}
-                    alt="check"
-                    width={24}
-                    height={24}
-                  />
-                ) : (
-                  <Image
-                    src={metodo + ".svg"}
-                    alt="check"
-                    width={24}
-                    height={24}
-                  />
-                )}
+                <Image
+                  src={
+                    metodoPagamento === metodo
+                      ? metodo + "-selected.svg"
+                      : metodo + ".svg"
+                  }
+                  alt="check"
+                  width={24}
+                  height={24}
+                />
                 <p>{metodo}</p>
               </div>
             ))}
@@ -126,21 +113,16 @@ export const Carrinho = () => {
                     : "text-primary-text"
                 }`}
             >
-              {metodoEntrega === metodo ? (
-                <Image
-                  src={metodo + "-selected.svg"}
-                  alt="check"
-                  width={24}
-                  height={24}
-                />
-              ) : (
-                <Image
-                  src={metodo + ".svg"}
-                  alt="check"
-                  width={24}
-                  height={24}
-                />
-              )}
+              <Image
+                src={
+                  metodoEntrega === metodo
+                    ? metodo + "-selected.svg"
+                    : metodo + ".svg"
+                }
+                alt="check"
+                width={24}
+                height={24}
+              />
               <p>{metodo}</p>
             </div>
           ))}
