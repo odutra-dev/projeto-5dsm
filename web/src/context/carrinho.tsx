@@ -15,6 +15,7 @@ interface ItemCarrinho {
   descricao: string;
   imagemUrl: string;
   preco: number;
+  quantidade: number;
 }
 
 // Tipo para o contexto
