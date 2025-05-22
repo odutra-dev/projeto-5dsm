@@ -34,7 +34,7 @@ export const Card = ({ id, nome, descricao, imagemUrl, preco }: CardProps) => {
             onClick={() => {
               setCarrinho([
                 ...carrinho,
-                { id, nome, descricao, imagemUrl, preco },
+                { id, nome, descricao, imagemUrl, preco, quantidade: 1 },
               ]);
             }}
             className="cursor-pointer w-12 h-12 rounded-full bg-primary-foreground border-1 border-primary-text flex justify-center items-center"
