@@ -17,7 +17,30 @@ export const CardCarrinho = ({
   imagemUrl,
   preco,
 }: CardCarrinhoProps) => {
-  const { setCarrinho } = useCarrinho();
+  const { setCarrinho, carrinho } = useCarrinho();
+
+  const quantidadeAtual =
+    carrinho.find((item) => item.id === id)?.quantidade || 1;
+
+  const handleDiminuirQuantidade = () => {
+    if (quantidadeAtual <= 1) {
+      // Remove o item do carrinho
+      setCarrinho((prev) => prev.filter((item) => item.id !== id));
+    } else {
+      // Diminui a quantidade
+      setCarrinho(
+        carrinho.map((item) => {
+          if (item.id === id) {
+            return {
+              ...item,
+              quantidade: item.quantidade - 1,
+            };
+          }
+          return item;
+        })
+      );
+    }
+  };
 
   return (
     <div className="flex bg-sextary/30 rounded-xl border-1 border-primary-text p-4 gap-4 relative mt-8">
@@ -32,35 +55,51 @@ export const CardCarrinho = ({
         <p className="font-bold text-primary-text text-lg line-clamp-1">
           {nome}
         </p>
-        <div className="flex justify-between items-center gap-4">
-          <div className="flex  items-center justify-center">
-            <a className="cursor-pointer w-12 h-12 rounded-full bg-primary-foreground border-1 border-primary-text flex justify-center items-center">
+        <div className="flex justify-between items-center gap-3">
+          <div className="flex items-center justify-center">
+            <button
+              onClick={handleDiminuirQuantidade}
+              className="cursor-pointer w-12 h-12 rounded-full bg-primary-foreground border-1 border-primary-text flex justify-center items-center"
+            >
               <Image
-                className=""
                 src="/minus.svg"
-                alt="Carrinho de compras"
-                width={24}
-                height={24}
+                alt="Diminuir quantidade"
+                width={16}
+                height={16}
               />
-            </a>
+            </button>
             <input
               type="number"
               disabled
-              value={10}
-              className=" p-1 md:p-2 w-10 h-10 text-center md:w-16 md:h-16 text-primary-text font-bold text-lg md:text-xl"
+              value={quantidadeAtual}
+              className="md:p-2 w-12 h-12 text-center md:w-16 md:h-16 text-primary-text font-bold text-lg md:text-xl"
             />
-            <a className="cursor-pointer w-12 h-12 rounded-full bg-primary-foreground border-1 border-primary-text flex justify-center items-center">
+            <button
+              onClick={() =>
+                setCarrinho(
+                  carrinho.map((item) => {
+                    if (item.id === id) {
+                      return {
+                        ...item,
+                        quantidade: item.quantidade + 1,
+                      };
+                    }
+                    return item;
+                  })
+                )
+              }
+              className="cursor-pointer w-12 h-12 rounded-full bg-primary-foreground border-1 border-primary-text flex justify-center items-center"
+            >
               <Image
-                className=""
                 src="/add.svg"
-                alt="Carrinho de compras"
+                alt="Aumentar quantidade"
                 width={24}
                 height={24}
               />
-            </a>
+            </button>
           </div>
-          <p className="font-bold text-primary-text text-xl">
-            R$ {preco.toFixed(2)}
+          <p className="font-bold text-primary-text text-base">
+            R$ {(preco * quantidadeAtual).toFixed(2)}
           </p>
         </div>
       </div>
@@ -72,9 +111,8 @@ export const CardCarrinho = ({
           }
         >
           <Image
-            className=""
             src="/trash.svg"
-            alt="excluir do carrinho"
+            alt="Excluir do carrinho"
             width={24}
             height={24}
           />
