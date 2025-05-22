@@ -31,7 +31,9 @@ export const Card = ({ id, nome, descricao, imagemUrl, preco }: CardProps) => {
             R$ {preco.toFixed(2)}
           </p>
           <button
-            onClick={() => {
+            onClick={(e) => {
+              e.preventDefault(); // impede que o link seja seguido
+              e.stopPropagation(); // impede que o evento suba para o Link
               setCarrinho([
                 ...carrinho,
                 { id, nome, descricao, imagemUrl, preco, quantidade: 1 },
