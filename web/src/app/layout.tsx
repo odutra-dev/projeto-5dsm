@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Nunito } from "next/font/google";
 import "./globals.css";
+import { CarrinhoProvider } from "@/context/carrinho";
 
 const nunitoSans = Nunito({
   variable: "--font-nunito-sans",
@@ -22,7 +23,7 @@ export default function RootLayout({
       <body
         className={`${nunitoSans.variable} font-sans antialiased bg-secondary`}
       >
-        {children}
+        <CarrinhoProvider>{children}</CarrinhoProvider>
       </body>
     </html>
   );
