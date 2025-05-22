@@ -8,10 +8,8 @@ import { useState } from "react";
 export const Carrinho = () => {
   const { carrinho } = useCarrinho();
 
-  const [metodoPagamento, setMetodoPagamento] = useState<string | null>(
-    "Dinheiro"
-  );
-  const [metodoEntrega, setMetodoEntrega] = useState<string | null>("Delivery");
+  const [metodoPagamento, setMetodoPagamento] = useState<string>("Dinheiro");
+  const [metodoEntrega, setMetodoEntrega] = useState<string>("Delivery");
 
   const metodosPagamento = ["Dinheiro", "Débito", "Crédito", "Pix"];
   const metodosEntrega = ["Delivery", "Retirada"];
@@ -83,13 +81,28 @@ export const Carrinho = () => {
               <div
                 key={metodo}
                 onClick={() => setMetodoPagamento(metodo)}
-                className={`p-4 border-1 border-primary-text rounded-2xl cursor-pointer
+                className={`p-4 border-1 border-primary-text rounded-2xl cursor-pointer flex items-center gap-2
                   ${
                     metodoPagamento === metodo
                       ? "bg-primary-text text-secondary"
                       : "text-primary-text"
                   }`}
               >
+                {metodoPagamento === metodo ? (
+                  <Image
+                    src={metodo + "-selected.svg"}
+                    alt="check"
+                    width={24}
+                    height={24}
+                  />
+                ) : (
+                  <Image
+                    src={metodo + ".svg"}
+                    alt="check"
+                    width={24}
+                    height={24}
+                  />
+                )}
                 <p>{metodo}</p>
               </div>
             ))}
@@ -106,13 +119,28 @@ export const Carrinho = () => {
             <div
               key={metodo}
               onClick={() => setMetodoEntrega(metodo)}
-              className={`p-4 border-2 border-primary-text rounded-2xl cursor-pointer
+              className={`p-4 border-2 border-primary-text rounded-2xl cursor-pointer flex items-center gap-2
                 ${
                   metodoEntrega === metodo
                     ? "bg-primary-foreground text-secondary"
                     : "text-primary-text"
                 }`}
             >
+              {metodoEntrega === metodo ? (
+                <Image
+                  src={metodo + "-selected.svg"}
+                  alt="check"
+                  width={24}
+                  height={24}
+                />
+              ) : (
+                <Image
+                  src={metodo + ".svg"}
+                  alt="check"
+                  width={24}
+                  height={24}
+                />
+              )}
               <p>{metodo}</p>
             </div>
           ))}
