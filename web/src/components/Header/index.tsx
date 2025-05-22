@@ -48,7 +48,7 @@ export default function Header(props: HeaderProps) {
                   height={24}
                 />
                 {carrinho.length > 0 && (
-                  <Notification className="absolute w-4 h-4	bg-secondary rounded-full top-0 right-0" />
+                  <Notification className="absolute w-4 h-4	bg-secondary rounded-full top-0 right-0 flex items-center justify-center" />
                 )}
               </div>
             ) : (

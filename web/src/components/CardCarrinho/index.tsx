@@ -1,4 +1,7 @@
+"use client";
 import Image from "next/image";
+
+import { useCarrinho } from "@/context/carrinho";
 
 type CardCarrinhoProps = {
   id: string;
@@ -8,7 +11,14 @@ type CardCarrinhoProps = {
   quantidade: number;
 };
 
-export const CardCarrinho = ({ nome, imagemUrl, preco }: CardCarrinhoProps) => {
+export const CardCarrinho = ({
+  id,
+  nome,
+  imagemUrl,
+  preco,
+}: CardCarrinhoProps) => {
+  const { setCarrinho } = useCarrinho();
+
   return (
     <div className="flex bg-sextary/30 rounded-xl border-1 border-primary-text p-4 gap-4 relative mt-8">
       <Image
@@ -55,7 +65,12 @@ export const CardCarrinho = ({ nome, imagemUrl, preco }: CardCarrinhoProps) => {
         </div>
       </div>
       <div className="absolute top-0 right-0 flex gap-2 -translate-y-1/2">
-        <a className="cursor-pointer w-12 h-12 rounded-full bg-settinary border-2 border-settinary-foreground flex justify-center items-center">
+        <a
+          className="cursor-pointer w-12 h-12 rounded-full bg-settinary border-2 border-settinary-foreground flex justify-center items-center"
+          onClick={() =>
+            setCarrinho((prev) => prev.filter((item) => item.id !== id))
+          }
+        >
           <Image
             className=""
             src="/trash.svg"
