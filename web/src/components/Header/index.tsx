@@ -1,7 +1,10 @@
+"use client";
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
 import Notification from "@/components/Notification";
+
+import { useCarrinho } from "@/context/carrinho";
 
 type HeaderProps = {
   icon: string;
@@ -12,6 +15,8 @@ type HeaderProps = {
 };
 
 export default function Header(props: HeaderProps) {
+  const { carrinho } = useCarrinho();
+
   return (
     <header className="bg-primary h-32">
       <div className="flex justify-between items-center px-6 md:px-12 h-full">
@@ -42,7 +47,9 @@ export default function Header(props: HeaderProps) {
                   width={24}
                   height={24}
                 />
-                <Notification className="absolute w-4 h-4	bg-secondary rounded-full top-0 right-0" />
+                {carrinho.length > 0 && (
+                  <Notification className="absolute w-4 h-4	bg-secondary rounded-full top-0 right-0" />
+                )}
               </div>
             ) : (
               <Image
