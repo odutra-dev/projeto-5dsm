@@ -33,7 +33,7 @@ export const Carrinho = () => {
     if (metodoEntrega === "Delivery") {
       router.push("/entrega");
     } else {
-      const mensagem = encodeURIComponent(`
+      /* const mensagem = encodeURIComponent(`
 Novo Pedido:
 ${carrinho
   .map(
@@ -52,7 +52,7 @@ Entrega: ${metodoEntrega}
       const numeroWhatsApp = process.env.NEXT_PUBLIC_WHATSAPP;
       const urlWhatsApp = `https://wa.me/${numeroWhatsApp}?text=${mensagem}`;
 
-      window.open(urlWhatsApp, "_blank");
+      window.open(urlWhatsApp, "_blank"); */
     }
   };
 
