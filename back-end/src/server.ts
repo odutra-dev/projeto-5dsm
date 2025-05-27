@@ -3,6 +3,7 @@ import cors from "@fastify/cors";
 import fastifyMultipart from "@fastify/multipart";
 import { fastifySwaggerUi } from "@fastify/swagger-ui";
 import { fastifySwagger } from "@fastify/swagger";
+import { adminRoute } from "./routes/adminRoute";
 import { produtoRoute } from "./routes/produtoRoute";
 import { clienteRoute } from "./routes/clienteRoute";
 import { enderecoRoute } from "./routes/enderecoRoute";
@@ -55,6 +56,10 @@ app.register(fastifySwaggerUi, {
 });
 
 // Registrando as rotas com prefixos
+app.register(adminRoute, {
+  prefix: "/admins",
+});
+
 app.register(clienteRoute, {
   prefix: "/clientes",
 });
