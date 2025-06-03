@@ -9,4 +9,5 @@ export type Admin = {
     nome: string;
     email: string;
     senha: string;
+    firebaseUid?: string; // opcional
   };

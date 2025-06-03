@@ -8,24 +8,9 @@ import {
 } from "../schemas/adminSchema";
 import { UseCaseAdmin } from "../usecases/UseCaseAdmin";
 import { NovoAdmin } from "../@types/typesAdmin";
-import { verifyFirebaseToken } from "../firebase/firebaseAuth";
-import crypto from "crypto";
 
 export async function adminRoute(app: FastifyInstance) {
   const useCaseAdmin = new UseCaseAdmin();
-  const algorithm = "aes-256-gcm";
-  const key = crypto.scryptSync(process.env.AES_SECRET || "minha-chave-secreta", "salt", 32);
-
-  function encrypt(text: string): string {
-    const iv = crypto.randomBytes(12); // GCM recomenda IV de 12 bytes
-    const cipher = crypto.createCipheriv(algorithm, key, iv);
-
-    let encrypted = cipher.update(text, "utf8", "hex");
-    encrypted += cipher.final("hex");
-
-    const authTag = cipher.getAuthTag().toString("hex");
-    return `${iv.toString("hex")}:${authTag}:${encrypted}`;
-  }
 
   app.post<{ Body: NovoAdmin }>(
     "/",
@@ -40,12 +25,14 @@ export async function adminRoute(app: FastifyInstance) {
     async (request, reply) => {
       try {
         const { nome, email, senha } = request.body;
-        const senhaCriptografada = encrypt(senha);
-        const admin = await useCaseAdmin.create({ nome, email, senha: senhaCriptografada });
+
+        // NÃO criptografa a senha aqui — já é feito no UseCaseAdmin
+        const admin = await useCaseAdmin.create({ nome, email, senha });
+
         return reply.status(201).send(admin);
       } catch (error) {
-        console.error(error);
-        return reply.status(500).send({ message: error });
+        console.error("Erro na rota de criação de admin:", error);
+        return reply.status(500).send({ message: "Erro ao criar administrador" });
       }
     }
   );
