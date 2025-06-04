@@ -1,8 +1,47 @@
+"use client";
 import Image from "next/image";
 
-import { CardProps } from "@/@types/CardProps";
+import { useCarrinho } from "@/context/carrinho";
 
-export const CardCarrinho = ({ nome, imagemUrl, preco }: CardProps) => {
+type CardCarrinhoProps = {
+  id: string;
+  nome: string;
+  imagemUrl: string;
+  preco: number;
+  quantidade: number;
+};
+
+export const CardCarrinho = ({
+  id,
+  nome,
+  imagemUrl,
+  preco,
+}: CardCarrinhoProps) => {
+  const { setCarrinho, carrinho } = useCarrinho();
+
+  const quantidadeAtual =
+    carrinho.find((item) => item.id === id)?.quantidade || 1;
+
+  const handleDiminuirQuantidade = () => {
+    if (quantidadeAtual <= 1) {
+      // Remove o item do carrinho
+      setCarrinho((prev) => prev.filter((item) => item.id !== id));
+    } else {
+      // Diminui a quantidade
+      setCarrinho(
+        carrinho.map((item) => {
+          if (item.id === id) {
+            return {
+              ...item,
+              quantidade: item.quantidade - 1,
+            };
+          }
+          return item;
+        })
+      );
+    }
+  };
+
   return (
     <div className="flex bg-sextary/30 rounded-xl border-1 border-primary-text p-4 gap-4 relative mt-8">
       <Image
@@ -16,44 +55,64 @@ export const CardCarrinho = ({ nome, imagemUrl, preco }: CardProps) => {
         <p className="font-bold text-primary-text text-lg line-clamp-1">
           {nome}
         </p>
-        <div className="flex justify-between items-center gap-4">
-          <div className="flex  items-center justify-center">
-            <a className="cursor-pointer w-12 h-12 rounded-full bg-primary-foreground border-1 border-primary-text flex justify-center items-center">
+        <div className="flex justify-between items-center gap-3">
+          <div className="flex items-center justify-center">
+            <button
+              onClick={handleDiminuirQuantidade}
+              className="cursor-pointer w-12 h-12 rounded-full bg-primary-foreground border-1 border-primary-text flex justify-center items-center"
+            >
               <Image
-                className=""
                 src="/minus.svg"
-                alt="Carrinho de compras"
-                width={24}
-                height={24}
+                alt="Diminuir quantidade"
+                width={16}
+                height={16}
               />
-            </a>
+            </button>
             <input
               type="number"
               disabled
-              value={10}
-              className=" p-1 md:p-2 w-10 h-10 text-center md:w-16 md:h-16 text-primary-text font-bold text-lg md:text-xl"
+              value={quantidadeAtual}
+              className="md:p-2 w-12 h-12 text-center md:w-16 md:h-16 text-primary-text font-bold text-lg md:text-xl"
             />
-            <a className="cursor-pointer w-12 h-12 rounded-full bg-primary-foreground border-1 border-primary-text flex justify-center items-center">
+            <button
+              onClick={() =>
+                setCarrinho(
+                  carrinho.map((item) => {
+                    if (item.id === id) {
+                      return {
+                        ...item,
+                        quantidade: item.quantidade + 1,
+                      };
+                    }
+                    return item;
+                  })
+                )
+              }
+              className="cursor-pointer w-12 h-12 rounded-full bg-primary-foreground border-1 border-primary-text flex justify-center items-center"
+            >
               <Image
-                className=""
                 src="/add.svg"
-                alt="Carrinho de compras"
+                alt="Aumentar quantidade"
                 width={24}
                 height={24}
               />
-            </a>
+            </button>
           </div>
-          <p className="font-bold text-primary-text text-xl">
-            R$ {preco.toFixed(2)}
+          <p className="font-bold text-primary-text text-base">
+            R$ {(preco * quantidadeAtual).toFixed(2)}
           </p>
         </div>
       </div>
       <div className="absolute top-0 right-0 flex gap-2 -translate-y-1/2">
-        <a className="cursor-pointer w-12 h-12 rounded-full bg-settinary border-2 border-settinary-foreground flex justify-center items-center">
+        <a
+          className="cursor-pointer w-12 h-12 rounded-full bg-settinary border-2 border-settinary-foreground flex justify-center items-center"
+          onClick={() =>
+            setCarrinho((prev) => prev.filter((item) => item.id !== id))
+          }
+        >
           <Image
-            className=""
             src="/trash.svg"
-            alt="excluir do carrinho"
+            alt="Excluir do carrinho"
             width={24}
             height={24}
           />

@@ -1,9 +1,14 @@
+"use client";
 import Image from "next/image";
 
 import { CardProps } from "@/@types/CardProps";
 import Link from "next/link";
 
+import { useCarrinho } from "@/context/carrinho";
+
 export const Card = ({ id, nome, descricao, imagemUrl, preco }: CardProps) => {
+  const { carrinho, setCarrinho } = useCarrinho();
+
   return (
     <Link
       href={`/cardapio/${id}`}
@@ -25,7 +30,17 @@ export const Card = ({ id, nome, descricao, imagemUrl, preco }: CardProps) => {
           <p className="font-bold text-primary-text text-xl">
             R$ {preco.toFixed(2)}
           </p>
-          <button className="cursor-pointer w-12 h-12 rounded-full bg-primary-foreground border-1 border-primary-text flex justify-center items-center">
+          <button
+            onClick={(e) => {
+              e.preventDefault(); // impede que o link seja seguido
+              e.stopPropagation(); // impede que o evento suba para o Link
+              setCarrinho([
+                ...carrinho,
+                { id, nome, descricao, imagemUrl, preco, quantidade: 1 },
+              ]);
+            }}
+            className="cursor-pointer w-12 h-12 rounded-full bg-primary-foreground border-1 border-primary-text flex justify-center items-center"
+          >
             <Image
               src="/add.svg"
               alt="Adicionar ao carrinho"
