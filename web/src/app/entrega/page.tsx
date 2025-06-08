@@ -14,6 +14,13 @@ export const Entrega = () => {
   const [bairro, setBairro] = useState<string>("");
   const [complemento, setComplemento] = useState<string>("");
 
+  function gerarCepAleatorio(): string {
+    // CEPs válidos geralmente vão de 01000000 a 99999999
+    const cep =
+      Math.floor(Math.random() * (99999999 - 10000000 + 1)) + 10000000;
+    return cep.toString();
+  }
+
   const realizarNovoPedido = async (e: FormEvent) => {
     e.preventDefault();
     try {
@@ -32,8 +39,10 @@ export const Entrega = () => {
       const rua = match?.[1]?.trim() || "";
       const numero = match?.[2]?.trim() || "";
 
-      const endereco = await api.post("/enderecos", {
-        cep: "",
+      const cep = gerarCepAleatorio();
+
+      await api.post("/enderecos", {
+        cep,
         rua: rua,
         bairro,
         numero,
@@ -41,8 +50,8 @@ export const Entrega = () => {
         clienteId: cliente.data.id,
       });
 
-      await api.post("/pedidos", {
-        data: new Date().toISOString(),
+      await api.post("/pedido", {
+        data: new Date().toISOString().split("T")[0],
         horario: new Date().toISOString(),
         tipo_entrega: metodoEntrega,
         tipo_pagamento: metodoPagamento,
