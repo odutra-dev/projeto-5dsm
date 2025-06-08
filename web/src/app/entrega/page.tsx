@@ -1,7 +1,11 @@
+"use client";
 import Header from "@/components/Header";
 import Image from "next/image";
+import { useCarrinho } from "@/context/carrinho";
 
 export const Entrega = () => {
+  const { metodoEntrega } = useCarrinho();
+
   return (
     <>
       <Header icon="back" title="Dados para entrega" link="/carrinho" />
@@ -28,38 +32,39 @@ export const Entrega = () => {
               placeholder="(yy) xxxxx-xxxx"
             />
           </div>
-          <div>
-            <label htmlFor="" className="text-primary-text">
-              Rua e Número
-            </label>
-            <input
-              type="text"
-              className="p-2 md:p-4 w-full md:max-w-xl rounded-xl border-1 h-12 border-primary-text text-primary-text"
-              placeholder="Rua Tal, 123"
-            />
-          </div>
-          <div className="flex gap-4">
-            <div>
-              <label htmlFor="" className="text-primary-text">
-                Complemento
-              </label>
-              <input
-                type="text"
-                className="p-2 md:p-4 w-full md:max-w-xl rounded-xl border-1 h-12 border-primary-text text-primary-text"
-                placeholder="Apt 101, Fundos"
-              />
-            </div>
-            <div>
-              <label htmlFor="" className="text-primary-text">
-                Bairro
-              </label>
-              <input
-                type="text"
-                className="p-2 md:p-4 w-full md:max-w-xl rounded-xl border-1 h-12 border-primary-text text-primary-text"
-                placeholder="Vila Nova"
-              />
-            </div>
-          </div>
+
+          {/* Parte da Entrega */}
+
+          {metodoEntrega === "Delivery" && (
+            <>
+              <div>
+                <label className="text-primary-text">Rua e Número</label>
+                <input
+                  type="text"
+                  className="p-2 md:p-4 w-full md:max-w-xl rounded-xl border-1 h-12 border-primary-text text-primary-text"
+                  placeholder="Rua Tal, 123"
+                />
+              </div>
+              <div className="flex gap-4">
+                <div>
+                  <label className="text-primary-text">Complemento</label>
+                  <input
+                    type="text"
+                    className="p-2 md:p-4 w-full md:max-w-xl rounded-xl border-1 h-12 border-primary-text text-primary-text"
+                    placeholder="Apt 101, Fundos"
+                  />
+                </div>
+                <div>
+                  <label className="text-primary-text">Bairro</label>
+                  <input
+                    type="text"
+                    className="p-2 md:p-4 w-full md:max-w-xl rounded-xl border-1 h-12 border-primary-text text-primary-text"
+                    placeholder="Vila Nova"
+                  />
+                </div>
+              </div>
+            </>
+          )}
 
           <button className="flex justify-center items-center gap-4 mb-6 w-full md:max-w-xl h-12 md:h-16 bg-primary border-2 border-primary-foreground rounded-2xl text-secondary font-bold text-xl md:text-2xl">
             Finalizar pedido

@@ -32,9 +32,7 @@ export const Carrinho = () => {
       return;
     }
 
-    if (metodoEntrega === "Delivery") {
-      router.push("/entrega");
-    }
+    router.push("/entrega");
   };
 
   return (
