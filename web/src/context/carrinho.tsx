@@ -22,6 +22,10 @@ interface ItemCarrinho {
 interface CarrinhoContextType {
   carrinho: ItemCarrinho[];
   setCarrinho: Dispatch<SetStateAction<ItemCarrinho[]>>;
+  metodoPagamento: string;
+  setMetodoPagamento: Dispatch<SetStateAction<string>>;
+  metodoEntrega: string;
+  setMetodoEntrega: Dispatch<SetStateAction<string>>;
 }
 
 // Cria o contexto com tipo ou valor inicial null
@@ -31,9 +35,20 @@ const CarrinhoContext = createContext<CarrinhoContextType | undefined>(
 
 export function CarrinhoProvider({ children }: { children: ReactNode }) {
   const [carrinho, setCarrinho] = useState<ItemCarrinho[]>([]);
+  const [metodoPagamento, setMetodoPagamento] = useState<string>("Dinheiro");
+  const [metodoEntrega, setMetodoEntrega] = useState<string>("Delivery");
 
   return (
-    <CarrinhoContext.Provider value={{ carrinho, setCarrinho }}>
+    <CarrinhoContext.Provider
+      value={{
+        carrinho,
+        setCarrinho,
+        metodoPagamento,
+        setMetodoPagamento,
+        metodoEntrega,
+        setMetodoEntrega,
+      }}
+    >
       {children}
     </CarrinhoContext.Provider>
   );
