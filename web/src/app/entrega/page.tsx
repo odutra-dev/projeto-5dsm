@@ -13,7 +13,6 @@ export const Entrega = () => {
   const [ruaCompleta, setRuaCompleta] = useState<string>("");
   const [bairro, setBairro] = useState<string>("");
   const [complemento, setComplemento] = useState<string>("");
-  const [cep, setCep] = useState<string>("");
 
   const realizarNovoPedido = async (e: FormEvent) => {
     e.preventDefault();
@@ -25,11 +24,16 @@ export const Entrega = () => {
 
       const match = ruaCompleta.match(/^(.*?)(?:,\s*)(\d+.*)$/);
 
+      if (!match) {
+        alert("Digite o endereço no formato: Rua Tal, 123");
+        return;
+      }
+
       const rua = match?.[1]?.trim() || "";
       const numero = match?.[2]?.trim() || "";
 
       const endereco = await api.post("/enderecos", {
-        cep,
+        cep: "",
         rua: rua,
         bairro,
         numero,
@@ -50,6 +54,9 @@ export const Entrega = () => {
       });
     } catch (error) {
       console.log(error);
+      alert(
+        "Ocorreu um erro ao realizar o pedido. Por favor, tente novamente."
+      );
     }
   };
 
