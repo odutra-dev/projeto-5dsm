@@ -4,8 +4,11 @@ import Image from "next/image";
 import { useCarrinho } from "@/context/carrinho";
 import { useState, FormEvent } from "react";
 import { api } from "@/services/api";
+import { useRouter } from "next/navigation";
 
 export const Entrega = () => {
+  const router = useRouter();
+
   const { metodoEntrega, metodoPagamento, carrinho } = useCarrinho();
   const [nome, setNome] = useState<string>("");
   const [telefone, setTelefone] = useState<string>("");
@@ -61,6 +64,26 @@ export const Entrega = () => {
           quantidade: item.quantidade,
         })),
       });
+
+      localStorage.setItem(
+        "usuarioLogado",
+        JSON.stringify([
+          {
+            id: cliente.data.id,
+            nome: cliente.data.nome,
+            telefone: cliente.data.telefone,
+            emdereco: {
+              cep: cep,
+              rua: rua,
+              bairro: bairro,
+              numero: numero,
+              complemento: complemento,
+            },
+          },
+        ])
+      );
+
+      router.push("/pedidos");
     } catch (error) {
       console.log(error);
       alert(
