@@ -222,34 +222,32 @@ export const Entrega = () => {
         </div>
       )}
 
-      <main className="mt-6 flex justify-center flex-col  px-6 w-full">
-        <form onSubmit={realizarNovoPedido} className="flex flex-col gap-4">
+      <main className="mt-6 px-4 sm:px-6 md:px-8 w-full flex justify-center">
+        <form
+          onSubmit={realizarNovoPedido}
+          className="flex flex-col gap-4 w-full max-w-xl"
+        >
           <div>
-            <label htmlFor="" className="text-primary-text">
-              Nome Completo
-            </label>
+            <label className="text-primary-text">Nome Completo</label>
             <input
               type="text"
               value={nome}
               onChange={(e) => setNome(e.target.value)}
-              className="p-2 md:p-4 w-full md:max-w-xl rounded-xl border-1 h-12 border-primary-text text-primary-text"
-              placeholder="João da Silva"
+              className="p-2 md:p-4 w-full rounded-xl border h-12 border-primary-text text-primary-text"
+              placeholder="João da Silva"
             />
           </div>
+
           <div>
-            <label htmlFor="" className="text-primary-text">
-              Telefone
-            </label>
+            <label className="text-primary-text">Telefone</label>
             <input
               value={telefone}
               onChange={(e) => setTelefone(e.target.value)}
               type="tel"
-              className="p-2 md:p-4 w-full md:max-w-xl rounded-xl border-1 h-12 border-primary-text text-primary-text"
+              className="p-2 md:p-4 w-full rounded-xl border h-12 border-primary-text text-primary-text"
               placeholder="(yy) xxxxx-xxxx"
             />
           </div>
-
-          {/* Parte da Entrega */}
 
           {metodoEntrega === "Delivery" && (
             <>
@@ -259,28 +257,28 @@ export const Entrega = () => {
                   value={ruaCompleta}
                   onChange={(e) => setRuaCompleta(e.target.value)}
                   type="text"
-                  className="p-2 md:p-4 w-full md:max-w-xl rounded-xl border-1 h-12 border-primary-text text-primary-text"
+                  className="p-2 md:p-4 w-full rounded-xl border h-12 border-primary-text text-primary-text"
                   placeholder="Rua Tal, 123"
                 />
               </div>
-              <div className="flex gap-4">
-                <div>
+              <div className="flex flex-col md:flex-row gap-4">
+                <div className="flex-1">
                   <label className="text-primary-text">Complemento</label>
                   <input
                     value={complemento}
                     onChange={(e) => setComplemento(e.target.value)}
                     type="text"
-                    className="p-2 md:p-4 w-full md:max-w-xl rounded-xl border-1 h-12 border-primary-text text-primary-text"
+                    className="p-2 md:p-4 w-full rounded-xl border h-12 border-primary-text text-primary-text"
                     placeholder="Apt 101, Fundos"
                   />
                 </div>
-                <div>
+                <div className="flex-1">
                   <label className="text-primary-text">Bairro</label>
                   <input
                     value={bairro}
                     onChange={(e) => setBairro(e.target.value)}
                     type="text"
-                    className="p-2 md:p-4 w-full md:max-w-xl rounded-xl border-1 h-12 border-primary-text text-primary-text"
+                    className="p-2 md:p-4 w-full rounded-xl border h-12 border-primary-text text-primary-text"
                     placeholder="Vila Nova"
                   />
                 </div>
@@ -289,7 +287,7 @@ export const Entrega = () => {
           )}
 
           <button
-            className="flex justify-center items-center gap-4 mb-6 w-full md:max-w-xl h-12 md:h-16 bg-primary border-2 border-primary-foreground rounded-2xl text-secondary font-bold text-xl md:text-2xl"
+            className="flex justify-center items-center gap-4 mb-6 w-full h-12 md:h-16 bg-primary border-2 border-primary-foreground rounded-2xl text-secondary font-bold text-xl md:text-2xl"
             type="submit"
           >
             Finalizar pedido
