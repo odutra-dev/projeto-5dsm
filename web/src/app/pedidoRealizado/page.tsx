@@ -63,11 +63,6 @@ export const PedidoRealizado = () => {
                 : "Avenida Francisco Glycério, 571"}
             </p>
           </div>
-          <hr className="w-full border-1 border-primary border-dashed" />
-          <div className="text-primary-text flex justify-between">
-            <p>Data do pedido:</p>
-            <p>{pedido?.data}</p>
-          </div>
         </div>
 
         <Link
