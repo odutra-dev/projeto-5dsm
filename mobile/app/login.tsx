@@ -8,10 +8,21 @@ import {
 } from "react-native";
 import { useState } from "react";
 import { SignIn } from "phosphor-react-native";
+import { api } from "../services/api";
+import { useRouter } from "expo-router";
 
 export default function Login() {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+
+  const router = useRouter();
+
+  const fazerLogin = () => {
+    // Lógica de login aqui
+
+    router.replace("/tabs");
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
