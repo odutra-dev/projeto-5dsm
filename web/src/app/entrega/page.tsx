@@ -38,7 +38,7 @@ export const Entrega = () => {
       return;
     }
 
-    if (metodoEntrega === "Delivery" && !usuarioSalvo.emdereco) {
+    if (metodoEntrega === "Delivery" && !usuarioSalvo.endereco) {
       alert("Endereço necessário para entrega.");
       return;
     }
@@ -67,10 +67,10 @@ export const Entrega = () => {
     setNome(usuarioSalvo.nome);
     setTelefone(usuarioSalvo.telefone);
     setRuaCompleta(
-      `${usuarioSalvo.emdereco.rua}, ${usuarioSalvo.emdereco.numero}`
+      `${usuarioSalvo.endereco.rua}, ${usuarioSalvo.endereco.numero}`
     );
-    setBairro(usuarioSalvo.emdereco.bairro);
-    setComplemento(usuarioSalvo.emdereco.complemento);
+    setBairro(usuarioSalvo.endereco.bairro);
+    setComplemento(usuarioSalvo.endereco.complemento);
     setMostrarModal(false);
   };
 
@@ -118,7 +118,7 @@ export const Entrega = () => {
               id: cliente.data.id,
               nome: cliente.data.nome,
               telefone: cliente.data.telefone,
-              emdereco: {
+              endereco: {
                 cep: cep,
                 rua: rua,
                 bairro: bairro,
@@ -136,7 +136,7 @@ export const Entrega = () => {
               id: cliente.data.id,
               nome: cliente.data.nome,
               telefone: cliente.data.telefone,
-              emdereco: null,
+              endereco: null,
             },
           ])
         );
@@ -191,15 +191,15 @@ export const Entrega = () => {
             {metodoEntrega === "Delivery" && (
               <>
                 <p>
-                  <strong>Endereço:</strong> {usuarioSalvo.emdereco.rua},{" "}
-                  {usuarioSalvo.emdereco.numero}
+                  <strong>Endereço:</strong> {usuarioSalvo.endereco.rua},{" "}
+                  {usuarioSalvo.endereco.numero}
                 </p>
                 <p>
-                  <strong>Bairro:</strong> {usuarioSalvo.emdereco.bairro}
+                  <strong>Bairro:</strong> {usuarioSalvo.endereco.bairro}
                 </p>
                 <p>
                   <strong>Complemento:</strong>{" "}
-                  {usuarioSalvo.emdereco.complemento}
+                  {usuarioSalvo.endereco.complemento}
                 </p>
               </>
             )}
