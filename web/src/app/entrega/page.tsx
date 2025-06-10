@@ -2,6 +2,7 @@
 import Header from "@/components/Header";
 import Image from "next/image";
 import { useCarrinho } from "@/context/carrinho";
+import { usePedido } from "@/context/pedido";
 import { useState, FormEvent, useEffect } from "react";
 import { api } from "@/services/api";
 import { useRouter } from "next/navigation";
@@ -9,6 +10,7 @@ import { useRouter } from "next/navigation";
 export const Entrega = () => {
   const router = useRouter();
   const { metodoEntrega, metodoPagamento, carrinho } = useCarrinho();
+  const { setPedido } = usePedido();
 
   const [usuarioSalvo, setUsuarioSalvo] = useState<any | null>(null);
   const [mostrarModal, setMostrarModal] = useState(false);
@@ -44,7 +46,7 @@ export const Entrega = () => {
     }
 
     try {
-      await api.post("/pedido", {
+      const pedidoRealizado = await api.post("/pedido", {
         data: new Date().toISOString().split("T")[0],
         horario: new Date().toISOString(),
         tipo_entrega: metodoEntrega,
@@ -55,6 +57,8 @@ export const Entrega = () => {
           quantidade: item.quantidade,
         })),
       });
+
+      setPedido(pedidoRealizado.data);
 
       router.push("/pedidoRealizado");
     } catch (error) {
@@ -142,7 +146,7 @@ export const Entrega = () => {
         );
       }
 
-      await api.post("/pedido", {
+      const pedidoRealizado = await api.post("/pedido", {
         data: new Date().toISOString().split("T")[0],
         horario: new Date().toISOString(),
         tipo_entrega: metodoEntrega,
@@ -153,6 +157,8 @@ export const Entrega = () => {
           quantidade: item.quantidade,
         })),
       });
+
+      setPedido(pedidoRealizado.data);
 
       router.push("/pedidoRealizado");
     } catch (error) {
