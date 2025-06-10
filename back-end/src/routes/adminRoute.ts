@@ -32,7 +32,51 @@ export async function adminRoute(app: FastifyInstance) {
         return reply.status(201).send(admin);
       } catch (error) {
         console.error("Erro na rota de criação de admin:", error);
-        return reply.status(500).send({ message: "Erro ao criar administrador" });
+        return reply
+          .status(500)
+          .send({ message: "Erro ao criar administrador" });
+      }
+    }
+  );
+
+  app.post<{ Body: { email: string; senha: string } }>(
+    "/login",
+    {
+      schema: {
+        tags: ["Administrador"],
+        description: "Login do administrador",
+        body: {
+          type: "object",
+          properties: {
+            email: { type: "string" },
+            senha: { type: "string" },
+          },
+          required: ["email", "senha"],
+        },
+        response: {
+          200: {
+            type: "object",
+            properties: {
+              token: { type: "string" },
+            },
+          },
+          401: {
+            type: "object",
+            properties: {
+              message: { type: "string" },
+            },
+          },
+        },
+      },
+    },
+    async (req, reply) => {
+      const { email, senha } = req.body;
+
+      try {
+        const result = await useCaseAdmin.login(email, senha);
+        return reply.send(result);
+      } catch (err) {
+        return reply.status(401).send({ message: "Email ou senha incorretos" });
       }
     }
   );
@@ -71,7 +115,9 @@ export async function adminRoute(app: FastifyInstance) {
       const { id } = req.params;
       const admin = await useCaseAdmin.findById(id);
       if (!admin) {
-        return res.status(404).send({ mensagem: "Administrador não encontrado" });
+        return res
+          .status(404)
+          .send({ mensagem: "Administrador não encontrado" });
       }
       return admin;
     }
