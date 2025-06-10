@@ -58,6 +58,7 @@ export async function adminRoute(app: FastifyInstance) {
             type: "object",
             properties: {
               token: { type: "string" },
+              nome: { type: "string" },
             },
           },
           401: {

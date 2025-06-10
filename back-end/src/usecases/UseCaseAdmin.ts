@@ -39,7 +39,7 @@ export class UseCaseAdmin {
       // 3. Cria no banco de dados com UID do Firebase
       const admin = await this.repository.create({
         nome,
-        email: encryptedEmail,
+        email,
         senha: encryptedSenha,
         firebaseUid,
       });
@@ -57,7 +57,10 @@ export class UseCaseAdmin {
 
   // Realiza o login de um administrador utilizando Firebase Auth com email e senha.
   // Se as credenciais forem válidas, retorna o token de autenticação (idToken).
-  async login(email: string, senha: string): Promise<{ token: string }> {
+  async login(
+    email: string,
+    senha: string
+  ): Promise<{ token: string; nome: string }> {
     try {
       const userCredential = await signInWithEmailAndPassword(
         auth,
@@ -65,7 +68,13 @@ export class UseCaseAdmin {
         senha
       );
       const token = await userCredential.user.getIdToken();
-      return { token };
+      const admin = await this.repository.findByEmail(email);
+
+      if (!admin) {
+        throw new Error("Administrador não encontrado");
+      }
+
+      return { token, nome: admin.nome };
     } catch (error) {
       console.error("Erro no login:", error);
       throw new Error("Credenciais inválidas");
