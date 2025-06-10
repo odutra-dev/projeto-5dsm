@@ -292,7 +292,7 @@ export const Entrega = () => {
           >
             Finalizar pedido
             <Image
-              src="/back.svg"
+              src="/seta.svg"
               alt="seta que aponta para a direita"
               width={16}
               height={16}
