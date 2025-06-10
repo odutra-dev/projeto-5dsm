@@ -2,6 +2,7 @@
 import Image from "next/image";
 
 import { usePedido } from "@/context/pedido";
+import Link from "next/link";
 
 export const PedidoRealizado = () => {
   const { pedido } = usePedido();
@@ -68,6 +69,13 @@ export const PedidoRealizado = () => {
             <p>{pedido?.data}</p>
           </div>
         </div>
+
+        <Link
+          className="mt-6 bg-primary h-12 md:h-16 text-base md:text-xl font-bold text-secondary w-full md:max-w-xl flex justify-center items-center gap-4 rounded-xl border-2 border-primary-foreground"
+          href="/cardapio"
+        >
+          Voltar ao cardápio
+        </Link>
       </main>
     </>
   );
