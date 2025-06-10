@@ -5,11 +5,13 @@ import {
   StyleSheet,
   TextInput,
   TouchableOpacity,
+  Alert,
 } from "react-native";
 import { useState } from "react";
 import { SignIn } from "phosphor-react-native";
 import { api } from "../services/api";
 import { useRouter } from "expo-router";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function Login() {
   const [email, setEmail] = useState<string>("");
@@ -17,10 +19,39 @@ export default function Login() {
 
   const router = useRouter();
 
-  const fazerLogin = () => {
-    // Lógica de login aqui
+  const [loading, setLoading] = useState(false);
 
-    router.replace("/tabs");
+  const fazerLogin = async () => {
+    if (!email || !password) {
+      Alert.alert("Campos obrigatórios", "Preencha e-mail e senha.");
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const response = await api.post("/admins/login", { email, password });
+
+      const { token, nome } = response.data;
+
+      // Valida se token e nome vieram corretamente
+      if (!token || !nome) {
+        throw new Error("Credenciais inválidas.");
+      }
+
+      await AsyncStorage.setItem("token", token);
+      await AsyncStorage.setItem("user", nome);
+
+      router.replace("(tabs)");
+    } catch (error) {
+      const mensagem =
+        error.response?.data?.message ||
+        error.message ||
+        "Erro ao tentar fazer login.";
+      Alert.alert("Erro", mensagem);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -41,6 +72,7 @@ export default function Login() {
         <View style={{ gap: 4 }}>
           <Text style={styles.label}>E-mail</Text>
           <TextInput
+            keyboardType="email-address"
             style={styles.input}
             onChangeText={setEmail}
             value={email}
@@ -49,15 +81,20 @@ export default function Login() {
         <View style={{ gap: 4 }}>
           <Text style={styles.label}>Senha</Text>
           <TextInput
+            secureTextEntry
             style={styles.input}
             onChangeText={setPassword}
             value={password}
           />
         </View>
 
-        <TouchableOpacity style={styles.botao}>
+        <TouchableOpacity
+          style={[styles.botao, loading && { opacity: 0.6 }]}
+          onPress={fazerLogin}
+          disabled={loading}
+        >
           <Text style={{ color: "#FFFBD6", fontSize: 16, fontWeight: "bold" }}>
-            Entrar
+            {loading ? "Entrando..." : "Entrar"}
           </Text>
           <SignIn size={24} color="#FFFBD6" weight="bold" />
         </TouchableOpacity>
