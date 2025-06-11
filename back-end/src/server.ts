@@ -81,7 +81,7 @@ app.register(pedidoRoute, {
 });
 
 // Iniciar o servidor
-app.listen({ port: 8001 }, (err, address) => {
+app.listen({ port: process.env.PORT || 8001 }, (err, address) => {
   const fileName = process.env.STORAGEFILENAME;
   const filePath = path.join(__dirname, "/firebase/", fileName);
   const content = JSON.stringify(
