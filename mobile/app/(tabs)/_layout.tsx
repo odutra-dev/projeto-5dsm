@@ -3,7 +3,7 @@ import { House, ClipboardText } from "phosphor-react-native";
 
 export default function Layout_Tabs() {
   return (
-    <Tabs>
+    <Tabs screenOptions={{ headerShown: false }}>
       <Tabs.Screen
         name="index"
         options={{
