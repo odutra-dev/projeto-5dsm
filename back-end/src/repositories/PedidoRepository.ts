@@ -2,23 +2,37 @@ import { collection, doc, setDoc, getDocs, getDoc, updateDoc } from "firebase/fi
 import { db } from "../firebase/firebaseConfig";
 import { NovoPedido, Pedido } from "../@types/typesPedidos";
 export class PedidoRepository {
-    async create(pedido: NovoPedido): Promise<Pedido> {
-
-        // Cria uma referência com ID automático
-        const novaRef = doc(collection(db, "pedidos"));
-        const idGerado = novaRef.id;
-        
-        const novoPedido:Pedido = {
-            id: idGerado,
-            data: pedido.data,
-            horario: pedido.horario,
-            tipo_entrega: pedido.tipo_entrega,
-            tipo_pagamento: pedido.tipo_pagamento
-        };
-
-        await setDoc(novaRef, novoPedido);
-        return novoPedido;
+  async create(pedido: NovoPedido): Promise<Pedido> {
+    const novaRef = doc(collection(db, "pedidos"));
+    const idGerado = novaRef.id;
+  
+    if (
+      !pedido.data ||
+      !pedido.horario ||
+      !pedido.tipo_entrega ||
+      !pedido.tipo_pagamento ||
+      pedido.status ||
+      pedido.valor
+    ) {
+      throw new Error("Campos obrigatórios do pedido ausentes ou inválidos.");
     }
+  
+    const novoPedido: Pedido = {
+      id: idGerado,
+      data: pedido.data,
+      horario: pedido.horario,
+      tipo_entrega: pedido.tipo_entrega,
+      tipo_pagamento: pedido.tipo_pagamento,
+      status: pedido.status,
+      valor: pedido.valor,
+    };
+  
+    const pedidoLimpo = JSON.parse(JSON.stringify(novoPedido));
+    await setDoc(novaRef, pedidoLimpo);
+    return novoPedido;
+  }
+  
+  
 
     async findAll(): Promise<Pedido[]> {
         const pedidoCol = collection(db, "pedidos");

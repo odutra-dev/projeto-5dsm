@@ -30,6 +30,8 @@ export async function pedidoRoute(app: FastifyInstance) {
         tipo_pagamento,
         clienteId,
         produtos,
+        status,
+        valor,
       } = request.body;
 
       const clienteExiste = await clienteRepository.findById(clienteId);
@@ -46,6 +48,8 @@ export async function pedidoRoute(app: FastifyInstance) {
           tipo_pagamento,
           clienteId,
           produtos, // apenas com produtoId e quantidade
+          status,
+          valor,
         });
 
         // Cria subdocumento dentro do cliente
@@ -56,6 +60,8 @@ export async function pedidoRoute(app: FastifyInstance) {
           tipo_entrega,
           tipo_pagamento,
           produtos,
+          status,
+          valor,
         });
 
         return reply.status(201).send(pedido);
