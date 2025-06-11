@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, FlatList } from "react-native";
 import { useEffect, useState } from "react";
 import { useRouter } from "expo-router";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -6,6 +6,7 @@ import Header from "../../components/Header";
 import theme from "../../theme";
 import CardStatus from "../../components/CardStatus";
 import { Hourglass, ChefHat, Check, Package } from "phosphor-react-native";
+import { ScrollView } from "react-native-gesture-handler";
 
 export default function Home() {
   const [user, setUser] = useState("");
@@ -27,11 +28,12 @@ export default function Home() {
   }, []);
 
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       <Header titulo="Dashboard" />
       <View style={styles.main}>
         <Text style={styles.titulo}>Olá, {user}!</Text>
 
+        <Text style={[styles.subtitulo, { marginTop: 32 }]}>Rsumo Geral</Text>
         <View style={styles.cards}>
           <CardStatus
             icone={<Hourglass size={24} />}
@@ -54,8 +56,31 @@ export default function Home() {
             status="CONCLUIDO"
           />
         </View>
+
+        <Text style={[styles.subtitulo, { marginTop: 32 }]}>
+          Pedidos Recentes
+        </Text>
+
+        <FlatList
+          data={[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]}
+          keyExtractor={(item) => String(item)}
+          renderItem={({ item }) => (
+            <View
+              style={{
+                backgroundColor: theme.colors.rosePrincipal[100],
+                padding: 16,
+                borderRadius: 8,
+                marginBottom: 16,
+              }}
+            >
+              <Text style={{ color: theme.colors.rosePrincipal[500] }}>
+                {item}
+              </Text>
+            </View>
+          )}
+        />
       </View>
-    </View>
+    </ScrollView>
   );
 }
 
@@ -73,11 +98,16 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: "bold",
   },
+  subtitulo: {
+    marginBottom: 16,
+    color: theme.colors.rosePrincipal[500],
+    fontSize: 18,
+    fontWeight: "bold",
+  },
 
   cards: {
     flexDirection: "row",
     gap: 16,
-    marginTop: 48,
     flexWrap: "wrap",
     width: "100%",
   },
