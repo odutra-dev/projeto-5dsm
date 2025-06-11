@@ -55,7 +55,9 @@ export default function CardStatus({ numero, status, icone }: Props) {
   const { bg, iconBg, borderBg, textColor, label } = statusConfig[status];
 
   return (
-    <View style={[styles.container, { backgroundColor: bg }]}>
+    <View
+      style={[styles.container, { backgroundColor: bg, borderColor: borderBg }]}
+    >
       <View
         style={[
           styles.iconWrapper,
@@ -83,6 +85,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     height: 80,
     width: 160,
+    borderWidth: 1,
   },
 
   iconWrapper: {
