@@ -35,7 +35,7 @@ const statusConfig = {
       number: theme.colors.bostonBlue[700],
       label: theme.colors.bostonBlue[700],
     },
-    label: "Produto",
+    label: "Pronto",
   },
   CONCLUIDO: {
     bg: theme.colors.atlantisGreen[300],
