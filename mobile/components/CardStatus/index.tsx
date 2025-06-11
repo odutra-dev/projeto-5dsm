@@ -1,11 +1,13 @@
 import { View, Text, StyleSheet } from "react-native";
 import theme from "../../theme";
 import { JSX } from "react";
+import { Hourglass, ChefHat, Check, Package } from "phosphor-react-native";
 
 const statusConfig = {
   PENDENTE: {
     bg: theme.colors.yellowBG[300],
     iconBg: theme.colors.yellowBG[400],
+    icone: <Hourglass size={24} color={theme.colors.yellowBG[700]} />,
     borderBg: theme.colors.yellowBG[600],
     textColor: {
       number: theme.colors.yellowBG[700],
@@ -16,6 +18,7 @@ const statusConfig = {
   EMPRODUCAO: {
     bg: theme.colors.sunshadeOrange[300],
     iconBg: theme.colors.sunshadeOrange[400],
+    icone: <ChefHat size={24} color={theme.colors.sunshadeOrange[700]} />,
     borderBg: theme.colors.sunshadeOrange[600],
     textColor: {
       number: theme.colors.sunshadeOrange[700],
@@ -26,6 +29,7 @@ const statusConfig = {
   PRONTO: {
     bg: theme.colors.bostonBlue[300],
     iconBg: theme.colors.bostonBlue[400],
+    icone: <Package size={24} color={theme.colors.bostonBlue[700]} />,
     borderBg: theme.colors.bostonBlue[600],
     textColor: {
       number: theme.colors.bostonBlue[700],
@@ -36,6 +40,7 @@ const statusConfig = {
   CONCLUIDO: {
     bg: theme.colors.atlantisGreen[300],
     iconBg: theme.colors.atlantisGreen[400],
+    icone: <Check size={24} color={theme.colors.atlantisGreen[700]} />,
     borderBg: theme.colors.atlantisGreen[600],
     textColor: {
       number: theme.colors.atlantisGreen[700],
@@ -48,11 +53,11 @@ const statusConfig = {
 type Props = {
   numero: string | number;
   status: keyof typeof statusConfig;
-  icone: JSX.Element;
 };
 
-export default function CardStatus({ numero, status, icone }: Props) {
-  const { bg, iconBg, borderBg, textColor, label } = statusConfig[status];
+export default function CardStatus({ numero, status }: Props) {
+  const { bg, icone, iconBg, borderBg, textColor, label } =
+    statusConfig[status];
 
   return (
     <View

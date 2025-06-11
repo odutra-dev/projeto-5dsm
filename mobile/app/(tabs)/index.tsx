@@ -1,12 +1,10 @@
-import { View, Text, StyleSheet, FlatList } from "react-native";
+import { View, Text, StyleSheet, FlatList, ScrollView } from "react-native";
 import { useEffect, useState } from "react";
 import { useRouter } from "expo-router";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Header from "../../components/Header";
 import theme from "../../theme";
 import CardStatus from "../../components/CardStatus";
-import { Hourglass, ChefHat, Check, Package } from "phosphor-react-native";
-import { ScrollView } from "react-native-gesture-handler";
 
 export default function Home() {
   const [user, setUser] = useState("");
@@ -35,26 +33,10 @@ export default function Home() {
 
         <Text style={[styles.subtitulo, { marginTop: 32 }]}>Rsumo Geral</Text>
         <View style={styles.cards}>
-          <CardStatus
-            icone={<Hourglass size={24} />}
-            numero={4}
-            status="PENDENTE"
-          />
-          <CardStatus
-            icone={<ChefHat size={24} />}
-            numero={2}
-            status="EMPRODUCAO"
-          />
-          <CardStatus
-            icone={<Package size={24} />}
-            numero={1}
-            status="PRONTO"
-          />
-          <CardStatus
-            icone={<Check size={24} />}
-            numero={3}
-            status="CONCLUIDO"
-          />
+          <CardStatus numero={4} status="PENDENTE" />
+          <CardStatus numero={2} status="EMPRODUCAO" />
+          <CardStatus numero={1} status="PRONTO" />
+          <CardStatus numero={3} status="CONCLUIDO" />
         </View>
 
         <Text style={[styles.subtitulo, { marginTop: 32 }]}>
