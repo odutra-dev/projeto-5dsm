@@ -4,7 +4,7 @@
   "description": "Essa parte do projeto é a parte que comunica com o banco de dados.",
   "main": "index.js",
   "scripts": {
-    "dev": "tsx watch --env-file .env src/server.ts"
+    "dev": "tsx watch src/server.ts"
   },
   "author": "",
   "license": "ISC",
