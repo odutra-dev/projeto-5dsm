@@ -15,14 +15,14 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function Login() {
   const [email, setEmail] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
+  const [senha, setSenha] = useState<string>("");
 
   const router = useRouter();
 
   const [loading, setLoading] = useState(false);
 
   const fazerLogin = async () => {
-    if (!email || !password) {
+    if (!email || !senha) {
       Alert.alert("Campos obrigatórios", "Preencha e-mail e senha.");
       return;
     }
@@ -30,7 +30,7 @@ export default function Login() {
     setLoading(true);
 
     try {
-      const response = await api.post("/admins/login", { email, password });
+      const response = await api.post("/admins/login", { email, senha });
 
       const { token, nome } = response.data;
 
@@ -83,8 +83,8 @@ export default function Login() {
           <TextInput
             secureTextEntry
             style={styles.input}
-            onChangeText={setPassword}
-            value={password}
+            onChangeText={setSenha}
+            value={senha}
           />
         </View>
 
