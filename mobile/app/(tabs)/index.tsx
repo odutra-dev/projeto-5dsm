@@ -31,7 +31,7 @@ export default function Home() {
       <View style={styles.main}>
         <Text style={styles.titulo}>Olá, {user}!</Text>
 
-        <Text style={[styles.subtitulo, { marginTop: 32 }]}>Rsumo Geral</Text>
+        <Text style={[styles.subtitulo, { marginTop: 32 }]}>Resumo Geral</Text>
         <View style={styles.cards}>
           <CardStatus numero={4} status="PENDENTE" />
           <CardStatus numero={2} status="EMPRODUCAO" />
