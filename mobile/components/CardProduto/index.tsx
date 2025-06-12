@@ -41,7 +41,7 @@ export const CardProduto = ({
 const styles = StyleSheet.create({
   cardContainer: {
     flexDirection: "row",
-    backgroundColor: theme.colors.yellowBG[200],
+    backgroundColor: theme.colors.sunshadeOrange[200],
     borderRadius: 16,
     borderWidth: 2,
     borderColor: theme.colors.chocolateBrown[400],
