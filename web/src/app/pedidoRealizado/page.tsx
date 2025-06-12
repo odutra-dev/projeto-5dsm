@@ -3,9 +3,23 @@ import Image from "next/image";
 
 import { usePedido } from "@/context/pedido";
 import Link from "next/link";
+import { useQuery } from "@tanstack/react-query";
+import { useEffect } from "react";
+import { api } from "@/services/api";
 
 export const PedidoRealizado = () => {
   const { pedido } = usePedido();
+
+  const selectPedido = async () => {
+    const { data } = await api.get(`/pedido/${pedido.id}`);
+
+    return data;
+  };
+
+  const query = useQuery({
+    queryKey: ["pedido"],
+    queryFn: () => selectPedido(),
+  });
 
   const usuario = localStorage.getItem("usuarioLogado");
   const endereco = usuario?.endereco;
@@ -31,6 +45,11 @@ export const PedidoRealizado = () => {
       </header>
 
       <main className="mt-6 flex justify-center flex-col  px-6 w-full">
+        <div className="w-full md:max-w-xl flex rounded-2xl justify-between bg-primary/30 border-1 border-primary-text p-4 gap-4">
+          <p className="text-primary-text">Status:</p>
+          <p className="font-bold text-primary-text">{query.data?.status}</p>
+        </div>
+
         <h2 className="text-center font-bold text-primary-text text-2xl">
           Informações gerais
         </h2>
