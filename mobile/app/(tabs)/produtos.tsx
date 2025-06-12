@@ -15,49 +15,67 @@ import { CardProduto, CardProps } from "../../components/CardProduto";
 import { api } from "../../services/api";
 import { Plus } from "phosphor-react-native";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import * as ImagePicker from "expo-image-picker";
+import * as MediaLibrary from "expo-media-library";
+
+type ImagemSelecionada = {
+  uri: string;
+  name: string;
+  type: string;
+};
 
 export default function Produtos() {
   const [modalVisible, setModalVisible] = useState(false);
-  const [imagem, setImagem] = useState<string | null>(null);
+  const [imagem, setImagem] = useState<ImagemSelecionada | null>(null);
   const [nome, setNome] = useState("");
   const [descricao, setDescricao] = useState("");
-  const [preco, setPreco] = useState(0);
+  const [preco, setPreco] = useState("");
   const queryClient = useQueryClient();
+
+  useEffect(() => {
+    (async () => {
+      const { status } = await MediaLibrary.requestPermissionsAsync();
+      if (status !== "granted") {
+        alert("É necessário permissão para acessar a biblioteca de mídia");
+      }
+    })();
+  }, []);
 
   const selecionaProdutos = async (): Promise<CardProps[]> => {
     const response = await api.get("/produtos");
     return response.data;
   };
+  const salvarProduto = async ({ nome, descricao, preco, imagem }) => {
+    try {
+      const formData = new FormData();
 
-  const salvarProduto = async () => {
-    if (!imagem) return;
+      console.log(imagem);
 
-    const formData = new FormData();
+      formData.append("nome", nome);
+      formData.append("descricao", descricao);
+      formData.append("preco", preco);
 
-    formData.append("nome", nome);
-    formData.append("descricao", descricao);
-    formData.append("preco", String(preco));
+      // imagem precisa ser um objeto com uri, name e type
+      formData.append("file", {
+        uri: imagem.uri,
+        name: imagem.name || "foto.jpg",
+        type: imagem.type || "image/jpeg",
+      });
 
-    const fileName = imagem.split("/").pop() || "image.jpg";
-    const match = /\.(\w+)$/.exec(fileName ?? "");
-    const ext = match?.[1] ?? "jpg";
-    const type = `image/${ext}`;
+      const response = await api.post("/produtos", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
 
-    formData.append("file", {
-      uri: imagem,
-      name: fileName,
-      type,
-    } as any); // "as any" é necessário para o React Native
-
-    const response = await api.post("/produtos", formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    });
-
-    return response.data;
+      console.log("Produto salvo com sucesso:", response.data);
+    } catch (error) {
+      console.error(
+        "Erro ao salvar produto:",
+        error.response?.data || error.message
+      );
+    }
   };
 
   const mutationAdicionaProduto = useMutation({
@@ -65,7 +83,7 @@ export default function Produtos() {
     mutationFn: salvarProduto,
     onSuccess: () => {
       setNome("");
-      setPreco(0);
+      setPreco("");
       setImagem(null);
       setDescricao("");
       setModalVisible(false);
@@ -78,16 +96,38 @@ export default function Produtos() {
     queryFn: selecionaProdutos,
   });
 
-  const escolherImagem = async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ["images"],
+  const selecionarImagem = async (setImagem) => {
+    const { status } = await MediaLibrary.requestPermissionsAsync();
+    if (status !== "granted") {
+      Alert.alert(
+        "Permissão necessária",
+        "Você precisa permitir acesso à galeria."
+      );
+      return;
+    }
+
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
-      aspect: [4, 3],
       quality: 1,
+      base64: false,
     });
 
-    if (!result.canceled) {
-      setImagem(result.assets[0].uri);
+    if (!result.canceled && result.assets.length > 0) {
+      const asset = result.assets[0];
+      const assetInfo = await MediaLibrary.getAssetInfoAsync(
+        asset.assetId || asset.id
+      );
+
+      const imagem = {
+        uri: assetInfo.localUri || asset.uri,
+        name: asset.fileName || "imagem.jpg",
+        type: asset.mimeType || "image/jpeg",
+      };
+
+      console.log("Imagem selecionada para upload:", imagem);
+
+      setImagem(imagem); // salva no estado do seu componente
     }
   };
 
@@ -128,10 +168,13 @@ export default function Produtos() {
           <View style={styles.mainModal}>
             <TouchableOpacity
               style={styles.imagePicker}
-              onPress={escolherImagem}
+              onPress={selecionarImagem}
             >
               {imagem ? (
-                <Image source={{ uri: imagem }} style={styles.imagePreview} />
+                <Image
+                  source={{ uri: imagem.uri }}
+                  style={styles.imagePreview}
+                />
               ) : (
                 <Text style={styles.imagePlaceholder}>Selecionar imagem</Text>
               )}
@@ -158,11 +201,21 @@ export default function Produtos() {
               style={styles.input}
             />
 
-            <TouchableOpacity style={styles.salvar} onPress={salvarProduto}>
+            <TouchableOpacity
+              style={styles.salvar}
+              onPress={() =>
+                mutationAdicionaProduto.mutate({
+                  nome,
+                  descricao,
+                  preco,
+                  imagem,
+                })
+              }
+            >
               <Text style={styles.salvarText}>Salvar</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity onPress={() => mutationAdicionaProduto.mutate()}>
+            <TouchableOpacity onPress={() => setModalVisible(false)}>
               <Text style={styles.cancelar}>Cancelar</Text>
             </TouchableOpacity>
           </View>
