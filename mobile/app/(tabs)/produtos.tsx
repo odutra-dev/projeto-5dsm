@@ -8,6 +8,7 @@ import {
   TextInput,
   Image,
   ScrollView,
+  Alert,
 } from "react-native";
 import Header from "../../components/Header";
 import theme from "../../theme";
@@ -32,15 +33,6 @@ export default function Produtos() {
   const [descricao, setDescricao] = useState("");
   const [preco, setPreco] = useState("");
   const queryClient = useQueryClient();
-
-  useEffect(() => {
-    (async () => {
-      const { status } = await MediaLibrary.requestPermissionsAsync();
-      if (status !== "granted") {
-        alert("É necessário permissão para acessar a biblioteca de mídia");
-      }
-    })();
-  }, []);
 
   const selecionaProdutos = async (): Promise<CardProps[]> => {
     const response = await api.get("/produtos");
@@ -168,7 +160,7 @@ export default function Produtos() {
           <View style={styles.mainModal}>
             <TouchableOpacity
               style={styles.imagePicker}
-              onPress={selecionarImagem}
+              onPress={() => selecionarImagem(setImagem)}
             >
               {imagem ? (
                 <Image
