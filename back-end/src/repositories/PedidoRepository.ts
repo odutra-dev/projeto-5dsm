@@ -11,8 +11,10 @@ export class PedidoRepository {
       !pedido.horario ||
       !pedido.tipo_entrega ||
       !pedido.tipo_pagamento ||
-      pedido.status ||
-      pedido.valor
+      !pedido.clienteId ||
+      !pedido.produtos  ||
+      !pedido.status ||
+      !pedido.valor
     ) {
       throw new Error("Campos obrigatórios do pedido ausentes ou inválidos.");
     }
@@ -23,6 +25,8 @@ export class PedidoRepository {
       horario: pedido.horario,
       tipo_entrega: pedido.tipo_entrega,
       tipo_pagamento: pedido.tipo_pagamento,
+      clienteId: pedido.clienteId,
+      produtos: pedido.produtos,
       status: pedido.status,
       valor: pedido.valor,
     };

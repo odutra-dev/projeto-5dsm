@@ -73,6 +73,16 @@ export const getAllPedidosResponseSchema = {
         clienteId: { type: "string" },
         status: { type: "string" },
         valor: { type: "number" },
+        produtos: {
+          type: "array",
+          items: {
+            type: "object",
+            properties: {
+              produtoId: { type: "string" },
+              quantidade: { type: "number" },
+            },
+          },
+        },
       },
     },
   },

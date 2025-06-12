@@ -6,6 +6,8 @@ export type Pedido = {
   horario: string;
   tipo_entrega: string;
   tipo_pagamento: string;
+  clienteId: string; // ✅ Adicionado aqui
+  produtos: PedidoProduto[];
   status: string;
   valor: number;
 };
