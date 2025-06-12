@@ -107,19 +107,21 @@ export default function Produtos() {
 
     if (!result.canceled && result.assets.length > 0) {
       const asset = result.assets[0];
+
+      // ⬇️ Aqui está a linha em questão:
       const assetInfo = await MediaLibrary.getAssetInfoAsync(
         asset.assetId || asset.id
       );
 
       const imagem = {
-        uri: assetInfo.localUri || asset.uri,
+        uri: assetInfo.localUri || asset.uri, // ⬅️ ESTA LINHA
         name: asset.fileName || "imagem.jpg",
         type: asset.mimeType || "image/jpeg",
       };
 
       console.log("Imagem selecionada para upload:", imagem);
 
-      setImagem(imagem); // salva no estado do seu componente
+      setImagem(imagem);
     }
   };
 
