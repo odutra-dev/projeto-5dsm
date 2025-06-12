@@ -56,6 +56,11 @@ export const Entrega = () => {
           produtoId: item.id,
           quantidade: item.quantidade,
         })),
+        valor: carrinho.reduce(
+          (total, item) => total + item.preco * item.quantidade,
+          0
+        ),
+        status: "PENDENTE",
       });
 
       setPedido(pedidoRealizado.data);
