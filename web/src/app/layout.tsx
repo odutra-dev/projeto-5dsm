@@ -3,6 +3,7 @@ import { Nunito } from "next/font/google";
 import "./globals.css";
 import { CarrinhoProvider } from "@/context/carrinho";
 import { PedidoProvider } from "@/context/pedido";
+import { QueryProvider } from "@/providers/QueryProvider";
 
 const nunitoSans = Nunito({
   variable: "--font-nunito-sans",
@@ -25,7 +26,9 @@ export default function RootLayout({
         className={`${nunitoSans.variable} font-sans antialiased bg-secondary`}
       >
         <CarrinhoProvider>
-          <PedidoProvider>{children}</PedidoProvider>
+          <PedidoProvider>
+            <QueryProvider>{children}</QueryProvider>
+          </PedidoProvider>
         </CarrinhoProvider>
       </body>
     </html>
