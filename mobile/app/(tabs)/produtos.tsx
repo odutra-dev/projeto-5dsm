@@ -108,13 +108,10 @@ export default function Produtos() {
     if (!result.canceled && result.assets.length > 0) {
       const asset = result.assets[0];
 
-      // ⬇️ Aqui está a linha em questão:
-      const assetInfo = await MediaLibrary.getAssetInfoAsync(
-        asset.assetId || asset.id
-      );
+      console.log("Asset retornado pelo ImagePicker:", asset);
 
       const imagem = {
-        uri: assetInfo.localUri || asset.uri, // ⬅️ ESTA LINHA
+        uri: asset.uri, // normalmente já vem como "file://..."
         name: asset.fileName || "imagem.jpg",
         type: asset.mimeType || "image/jpeg",
       };
