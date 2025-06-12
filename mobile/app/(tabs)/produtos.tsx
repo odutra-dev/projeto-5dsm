@@ -7,7 +7,6 @@ import {
   Modal,
   TextInput,
   Image,
-  ScrollView,
   Alert,
 } from "react-native";
 import Header from "../../components/Header";
@@ -34,21 +33,28 @@ export default function Produtos() {
   const [preco, setPreco] = useState("");
   const queryClient = useQueryClient();
 
+  useEffect(() => {
+    (async () => {
+      const { status } = await MediaLibrary.requestPermissionsAsync();
+      if (status !== "granted") {
+        alert("É necessário permissão para acessar a biblioteca de mídia");
+      }
+    })();
+  }, []);
+
   const selecionaProdutos = async (): Promise<CardProps[]> => {
     const response = await api.get("/produtos");
     return response.data;
   };
+
   const salvarProduto = async ({ nome, descricao, preco, imagem }) => {
     try {
       const formData = new FormData();
-
-      console.log(imagem);
 
       formData.append("nome", nome);
       formData.append("descricao", descricao);
       formData.append("preco", preco);
 
-      // imagem precisa ser um objeto com uri, name e type
       formData.append("file", {
         uri: imagem.uri,
         name: imagem.name || "foto.jpg",
@@ -108,15 +114,15 @@ export default function Produtos() {
     if (!result.canceled && result.assets.length > 0) {
       const asset = result.assets[0];
 
-      console.log("Asset retornado pelo ImagePicker:", asset);
+      const assetInfo = await MediaLibrary.getAssetInfoAsync(
+        asset.assetId || asset.id
+      );
 
       const imagem = {
-        uri: asset.uri, // normalmente já vem como "file://..."
+        uri: assetInfo.localUri || asset.uri,
         name: asset.fileName || "imagem.jpg",
         type: asset.mimeType || "image/jpeg",
       };
-
-      console.log("Imagem selecionada para upload:", imagem);
 
       setImagem(imagem);
     }
@@ -126,24 +132,23 @@ export default function Produtos() {
     <View style={styles.container}>
       <Header titulo="Produtos" />
 
-      <View style={styles.main}>
-        <Text style={styles.titulo}>Produtos</Text>
-
-        <FlatList
-          style={{ marginTop: 16 }}
-          data={querySelecionaProdutos.data}
-          renderItem={({ item }) => (
-            <CardProduto
-              id={item.id}
-              nome={item.nome}
-              descricao={item.descricao}
-              imagemUrl={item.imagemUrl}
-              preco={item.preco}
-            />
-          )}
-          keyExtractor={(item) => item.id.toString()}
-        />
-      </View>
+      <FlatList
+        data={querySelecionaProdutos.data}
+        keyExtractor={(item) => item.id.toString()}
+        renderItem={({ item }) => (
+          <CardProduto
+            id={item.id}
+            nome={item.nome}
+            descricao={item.descricao}
+            imagemUrl={item.imagemUrl}
+            preco={item.preco}
+          />
+        )}
+        ListHeaderComponent={
+          <Text style={[styles.titulo, { marginBottom: 16 }]}>Produtos</Text>
+        }
+        contentContainerStyle={styles.flatListContainer}
+      />
 
       <TouchableOpacity
         style={styles.add}
@@ -153,7 +158,7 @@ export default function Produtos() {
       </TouchableOpacity>
 
       <Modal visible={modalVisible} animationType="slide">
-        <ScrollView contentContainerStyle={styles.modalContainer}>
+        <View style={styles.modalContainer}>
           <Header titulo="Adicionar Produto" />
 
           <View style={styles.mainModal}>
@@ -206,11 +211,14 @@ export default function Produtos() {
               <Text style={styles.salvarText}>Salvar</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity onPress={() => setModalVisible(false)}>
-              <Text style={styles.cancelar}>Cancelar</Text>
+            <TouchableOpacity
+              style={styles.cancelar}
+              onPress={() => setModalVisible(false)}
+            >
+              <Text style={styles.cancelarText}>Cancelar</Text>
             </TouchableOpacity>
           </View>
-        </ScrollView>
+        </View>
       </Modal>
     </View>
   );
@@ -222,14 +230,16 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.yellowBG[100],
     position: "relative",
   },
-  main: {
-    paddingHorizontal: 24,
-    marginTop: 40,
-  },
   titulo: {
     color: theme.colors.rosePrincipal[500],
     fontSize: 24,
     fontWeight: "bold",
+    paddingHorizontal: 24,
+    paddingTop: 40,
+  },
+  flatListContainer: {
+    paddingHorizontal: 24,
+    paddingBottom: 120,
   },
   add: {
     backgroundColor: theme.colors.rosePrincipal[500],
@@ -244,7 +254,7 @@ const styles = StyleSheet.create({
   },
   modalContainer: {
     backgroundColor: theme.colors.yellowBG[100],
-    flexGrow: 1,
+    flex: 1,
   },
   mainModal: {
     paddingHorizontal: 24,
@@ -290,8 +300,14 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   cancelar: {
-    textAlign: "center",
-    color: "#666",
+    backgroundColor: theme.colors.chocolateBrown[200],
+    padding: 12,
+    borderRadius: 8,
+    alignItems: "center",
+  },
+  cancelarText: {
+    color: theme.colors.chocolateBrown[600],
     fontSize: 16,
+    fontWeight: "bold",
   },
 });
