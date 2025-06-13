@@ -316,7 +316,7 @@ export default function DetalhesPedido() {
           </Text>
         </TouchableOpacity>
         <TouchableOpacity
-          onPress={() => updateStatus.mutate("PRONTO")}
+          onPress={() => updateStatus.mutate("CONCLUIDO")}
           style={[
             styles.botao,
             {
