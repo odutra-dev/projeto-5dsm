@@ -1,5 +1,10 @@
 import { Tabs } from "expo-router";
-import { House, ClipboardText, Package } from "phosphor-react-native";
+import {
+  House,
+  ClipboardText,
+  Package,
+  ClockCounterClockwise,
+} from "phosphor-react-native";
 import theme from "../../theme";
 
 export default function Layout_Tabs() {
@@ -40,6 +45,15 @@ export default function Layout_Tabs() {
           title: "Produtos",
           tabBarIcon: ({ color, size }) => {
             return <Package color={color} size={size} />;
+          },
+        }}
+      />
+      <Tabs.Screen
+        name="historico"
+        options={{
+          title: "Histórico",
+          tabBarIcon: ({ color, size }) => {
+            return <ClockCounterClockwise color={color} size={size} />;
           },
         }}
       />
