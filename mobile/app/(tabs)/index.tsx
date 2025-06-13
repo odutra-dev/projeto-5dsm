@@ -104,7 +104,11 @@ export default function Home() {
         }
         data={querySelecionaPedidos.data}
         keyExtractor={(item) => item.id}
-        renderItem={({ item }) => <CardPedido {...item} />}
+        renderItem={({ item }) => (
+          <TouchableOpacity onPress={() => router.push(`/pedido/${item.id}`)}>
+            <CardPedido {...item} />
+          </TouchableOpacity>
+        )}
       />
     </View>
   );
