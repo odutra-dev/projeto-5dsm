@@ -97,7 +97,7 @@ export default function Home() {
 
             <View style={styles.main}>
               <Text style={[styles.subtitulo]}>Pedidos Recentes</Text>
-              <TouchableOpacity>
+              <TouchableOpacity onPress={() => router.push("/pedidos")}>
                 <Text style={styles.verTodos}>Ver todos</Text>
               </TouchableOpacity>
             </View>
