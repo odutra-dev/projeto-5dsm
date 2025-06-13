@@ -139,9 +139,12 @@ export default function CardPedido({
       <View style={[styles.dashedLine, { borderColor: borderBg }]} />
 
       {/* Horário e quantidade de itens */}
-      <Text style={[styles.info, { color: textColor.label }]}>{`${horario} — ${
-        Array.isArray(produtos) ? produtos.length : 0
-      } itens`}</Text>
+      <Text style={[styles.info, { color: textColor.label }]}>{`${new Date(
+        horario
+      ).toLocaleTimeString("pt-BR", {
+        hour: "2-digit",
+        minute: "2-digit",
+      })} — ${Array.isArray(produtos) ? produtos.length : 0} itens`}</Text>
 
       {/* Linha pontilhada */}
       <View style={[styles.dashedLine, { borderColor: borderBg }]} />
