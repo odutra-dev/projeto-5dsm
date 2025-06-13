@@ -18,6 +18,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState, useEffect } from "react";
 import * as ImagePicker from "expo-image-picker";
 import * as MediaLibrary from "expo-media-library";
+import { showToastWithGravity } from "../../util/toast";
 
 type ImagemSelecionada = {
   uri: string;
@@ -77,6 +78,7 @@ export default function Produtos() {
       setDescricao("");
       setModalVisible(false);
       queryClient.invalidateQueries({ queryKey: ["produtos"] });
+      showToastWithGravity("Produto adicionado com sucesso!");
     },
   });
 
