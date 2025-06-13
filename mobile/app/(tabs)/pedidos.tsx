@@ -76,8 +76,12 @@ export default function Pedidos() {
 
         <FlatList
           data={pedidosFiltrados}
-          keyExtractor={(item) => item.numero}
-          renderItem={({ item }) => <CardPedido {...item} />}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item }) => (
+            <TouchableOpacity onPress={() => router.push(`/pedido/${item.id}`)}>
+              <CardPedido {...item} />
+            </TouchableOpacity>
+          )}
           ListEmptyComponent={
             <Text style={{ textAlign: "center", marginTop: 20 }}>
               Nenhum pedido com esse status.
