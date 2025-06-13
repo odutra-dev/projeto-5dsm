@@ -25,6 +25,13 @@ export default function Pedidos() {
   const [user, setUser] = useState("");
   const queryClient = useQueryClient();
 
+  const isToday = (dateString: string) => {
+    const today = new Date();
+    const todayString = today.toISOString().split("T")[0]; // formato "2025-06-13"
+
+    return dateString === todayString;
+  };
+
   const selecionaPedidos = async () => {
     const response = await api.get("/pedido");
     console.log(response.data);
@@ -75,7 +82,7 @@ export default function Pedidos() {
         </View>
 
         <FlatList
-          data={pedidosFiltrados}
+          data={pedidosFiltrados.filter((p) => isToday(p.data))}
           keyExtractor={(item) => item.id}
           renderItem={({ item }) => (
             <TouchableOpacity onPress={() => router.push(`/pedido/${item.id}`)}>

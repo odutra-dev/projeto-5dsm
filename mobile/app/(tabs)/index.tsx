@@ -22,7 +22,6 @@ export default function Home() {
 
   const selecionaPedidos = async () => {
     const response = await api.get("/pedido");
-    console.log(response.data);
     return response.data;
   };
 
@@ -47,6 +46,13 @@ export default function Home() {
     getUser();
   }, []);
 
+  const isToday = (dateString: string) => {
+    const today = new Date();
+    const todayString = today.toISOString().split("T")[0]; // formato "2025-06-13"
+
+    return dateString === todayString;
+  };
+
   return (
     <View style={styles.container}>
       <Header titulo="Dashboard" />
@@ -63,7 +69,8 @@ export default function Home() {
               <CardStatus
                 numero={
                   querySelecionaPedidos.data?.filter(
-                    (pedido: any) => pedido.status === "PENDENTE"
+                    (pedido: any) =>
+                      pedido.status === "PENDENTE" && isToday(pedido.data)
                   ).length || 0
                 }
                 status="PENDENTE"
@@ -71,7 +78,8 @@ export default function Home() {
               <CardStatus
                 numero={
                   querySelecionaPedidos.data?.filter(
-                    (pedido: any) => pedido.status === "EMPRODUCAO"
+                    (pedido: any) =>
+                      pedido.status === "EMPRODUCAO" && isToday(pedido.data)
                   ).length || 0
                 }
                 status="EMPRODUCAO"
@@ -79,7 +87,8 @@ export default function Home() {
               <CardStatus
                 numero={
                   querySelecionaPedidos.data?.filter(
-                    (pedido: any) => pedido.status === "PRONTO"
+                    (pedido: any) =>
+                      pedido.status === "PRONTO" && isToday(pedido.data)
                   ).length || 0
                 }
                 status="PRONTO"
@@ -87,7 +96,8 @@ export default function Home() {
               <CardStatus
                 numero={
                   querySelecionaPedidos.data?.filter(
-                    (pedido: any) => pedido.status === "CONCLUIDO"
+                    (pedido: any) =>
+                      pedido.status === "CONCLUIDO" && isToday(pedido.data)
                   ).length || 0
                 }
                 status="CONCLUIDO"
@@ -102,7 +112,9 @@ export default function Home() {
             </View>
           </>
         }
-        data={querySelecionaPedidos.data}
+        data={querySelecionaPedidos.data?.filter(
+          (pedido: any) => isToday(pedido.data) && pedido.status !== "CONCLUIDO"
+        )}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
           <TouchableOpacity onPress={() => router.push(`/pedido/${item.id}`)}>
