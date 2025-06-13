@@ -6,11 +6,14 @@ import {
   StyleSheet,
   ActivityIndicator,
   TouchableOpacity,
+  ScrollView,
 } from "react-native";
 import theme from "../../theme";
 import { useEffect, useState } from "react";
 import { api } from "../../services/api";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { showToastWithGravity } from "../../util/toast";
+import { User, Phone, MapPin } from "phosphor-react-native";
 
 const statusConfig = {
   PENDENTE: {
@@ -75,6 +78,7 @@ type Pedido = {
 type Cliente = {
   id: string;
   nome: string;
+  telefone: string;
 };
 
 type Endereco = {
@@ -87,8 +91,20 @@ type Endereco = {
   clienteId: string;
 };
 
+type Produto = {
+  id: string;
+  nome: string;
+  descricao: string;
+  preco: number;
+  imagemUrl: string;
+};
+
 export default function DetalhesPedido() {
   const { id } = useLocalSearchParams<{ id: string }>();
+
+  const [usuario, setUsuario] = useState<Cliente | null>(null);
+  const [endereco, setEndereco] = useState<Endereco | null>(null);
+  const [produtosDetalhes, setProdutosDetalhes] = useState<Produto[]>([]);
 
   const router = useRouter();
 
@@ -103,17 +119,28 @@ export default function DetalhesPedido() {
     },
   });
 
-  const [nome, setNome] = useState<string>("");
-  const [endereco, setEndereco] = useState<Endereco | null>(null);
-
   const { data: pedido, isLoading } = useQuery<Pedido>({
     queryKey: ["pedido", id],
     queryFn: async () => {
       const res = await api.get<Pedido>(`/pedido/${id}`);
+
+      console.log(res.data);
+
       return res.data;
     },
     enabled: !!id, // só executa se tiver id
   });
+
+  useEffect(() => {
+    if (pedido) {
+      fetchProdutosDetalhes().then((produtos) => {
+        const filtrados = produtos.filter((p) =>
+          pedido?.produtos?.some((pp) => pp.produtoId === p.id)
+        );
+        setProdutosDetalhes(filtrados);
+      });
+    }
+  }, [pedido]);
 
   useEffect(() => {
     if (pedido?.clienteId) {
@@ -121,9 +148,18 @@ export default function DetalhesPedido() {
     }
   }, [id, pedido?.clienteId]);
 
+  if (isLoading || !pedido) {
+    return <ActivityIndicator />;
+  }
+
+  const fetchProdutosDetalhes = async () => {
+    const res = await api.get<Produto[]>("/produtos");
+    return res.data;
+  };
+
   const getUser = async (clienteId: string) => {
     const userRes = await api.get<Cliente>(`/clientes/${clienteId}`);
-    setNome(userRes.data.nome);
+    setUsuario(userRes.data);
 
     const enderecosRes = await api.get<Endereco[]>(`/enderecos/`);
 
@@ -136,15 +172,11 @@ export default function DetalhesPedido() {
     }
   };
 
-  if (isLoading || !pedido) {
-    return <ActivityIndicator />;
-  }
-
   const { bg, borderBg, bgLabel, textColor, label } =
     statusConfig[pedido.status];
 
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.title}>Detalhes do Pedido</Text>
       </View>
@@ -169,23 +201,68 @@ export default function DetalhesPedido() {
           {id}
         </Text>
 
-        {/* Nome e endereço */}
-        <Text style={[styles.nome, { color: textColor.label }]}>{nome}</Text>
-        <Text style={[styles.endereco, { color: textColor.label }]}>
-          {endereco == null
-            ? "Av. Francisco Glycério, 571, Santos, São Paulo"
-            : endereco.rua + ", " + endereco.numero}
+        <Text style={[styles.info, { color: textColor.label }]}>
+          {new Intl.DateTimeFormat("pt-BR").format(new Date(pedido.data))} -{" "}
+          {new Date(pedido.horario).toLocaleTimeString("pt-BR", {
+            hour: "2-digit",
+            minute: "2-digit",
+          })}
         </Text>
+
+        {/* Informações do Cliente */}
+        <Text
+          style={[styles.nome, { color: textColor.label, fontWeight: "bold" }]}
+        >
+          Informações do Cliente
+        </Text>
+        <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
+          <User size={20} color={textColor.label} />
+          <Text style={[styles.nome, { color: textColor.label }]}>
+            {usuario?.nome}
+          </Text>
+        </View>
+        <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
+          <Phone size={20} color={textColor.label} />
+          <Text style={[styles.nome, { color: textColor.label }]}>
+            {usuario?.telefone}
+          </Text>
+        </View>
+        <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
+          <MapPin size={20} color={textColor.label} />
+          <Text style={[styles.endereco, { color: textColor.label }]}>
+            {endereco == null
+              ? "Av. Francisco Glycério, 571, Santos, São Paulo"
+              : endereco.rua + ", " + endereco.numero}
+          </Text>
+        </View>
 
         {/* Linha pontilhada */}
         <View style={[styles.dashedLine, { borderColor: borderBg }]} />
 
-        {/* Horário e quantidade de itens */}
-        <Text style={[styles.info, { color: textColor.label }]}>{`${
-          pedido.horario
-        } — ${
-          Array.isArray(pedido.produtos) ? pedido.produtos.length : 0
-        } itens`}</Text>
+        {/* Produtos */}
+        <Text
+          style={[styles.nome, { color: textColor.label, fontWeight: "bold" }]}
+        >
+          Itens do Pedido
+        </Text>
+
+        {pedido.produtos?.map((produto) => {
+          const detalhe = produtosDetalhes.find(
+            (p) => p.id === produto.produtoId
+          );
+
+          return (
+            <View
+              key={produto.produtoId}
+              style={{ flexDirection: "row", alignItems: "center", gap: 8 }}
+            >
+              <Text style={[styles.produto, { color: textColor.label }]}>
+                {produto.quantidade}x {detalhe ? detalhe.nome : "Carregando..."}{" "}
+                - R$ {detalhe ? detalhe.preco.toFixed(2) : "--"}
+              </Text>
+            </View>
+          );
+        })}
 
         {/* Linha pontilhada */}
         <View style={[styles.dashedLine, { borderColor: borderBg }]} />
@@ -276,7 +353,7 @@ export default function DetalhesPedido() {
           </Text>
         </TouchableOpacity>
       </View>
-    </View>
+    </ScrollView>
   );
 }
 
@@ -313,6 +390,10 @@ const styles = StyleSheet.create({
     paddingVertical: 4,
     paddingHorizontal: 10,
   },
+  produto: {
+    fontSize: 16,
+    marginVertical: 4,
+  },
   statusLabel: {
     fontWeight: "bold",
     fontSize: 12,
@@ -325,11 +406,11 @@ const styles = StyleSheet.create({
   },
   nome: {
     fontSize: 16,
-    fontWeight: "600",
+    marginVertical: 4,
   },
   endereco: {
-    fontSize: 14,
-    marginBottom: 8,
+    fontSize: 16,
+    marginVertical: 4,
   },
   dashedLine: {
     borderBottomWidth: 1,
