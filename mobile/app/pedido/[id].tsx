@@ -116,6 +116,7 @@ export default function DetalhesPedido() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["pedido", id] }); // Atualiza os dados
+      showToastWithGravity("Status atualizado com sucesso!");
     },
   });
 
