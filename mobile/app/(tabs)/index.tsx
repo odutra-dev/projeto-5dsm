@@ -60,10 +60,38 @@ export default function Home() {
               Resumo Geral
             </Text>
             <View style={styles.cards}>
-              <CardStatus numero={4} status="PENDENTE" />
-              <CardStatus numero={2} status="EMPRODUCAO" />
-              <CardStatus numero={1} status="PRONTO" />
-              <CardStatus numero={3} status="CONCLUIDO" />
+              <CardStatus
+                numero={
+                  querySelecionaPedidos.data?.filter(
+                    (pedido: any) => pedido.status === "PENDENTE"
+                  ).length || 0
+                }
+                status="PENDENTE"
+              />
+              <CardStatus
+                numero={
+                  querySelecionaPedidos.data?.filter(
+                    (pedido: any) => pedido.status === "EMPRODUCAO"
+                  ).length || 0
+                }
+                status="EMPRODUCAO"
+              />
+              <CardStatus
+                numero={
+                  querySelecionaPedidos.data?.filter(
+                    (pedido: any) => pedido.status === "PRONTO"
+                  ).length || 0
+                }
+                status="PRONTO"
+              />
+              <CardStatus
+                numero={
+                  querySelecionaPedidos.data?.filter(
+                    (pedido: any) => pedido.status === "CONCLUIDO"
+                  ).length || 0
+                }
+                status="CONCLUIDO"
+              />
             </View>
 
             <View style={styles.main}>
