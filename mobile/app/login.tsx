@@ -13,6 +13,7 @@ import { api } from "../services/api";
 import { useRouter } from "expo-router";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import theme from "../theme";
+import { showToastWithGravity } from "../util/toast";
 
 export default function Login() {
   const [email, setEmail] = useState<string>("");
@@ -42,6 +43,8 @@ export default function Login() {
 
       await AsyncStorage.setItem("token", token);
       await AsyncStorage.setItem("user", nome);
+
+      showToastWithGravity("Login realizado com sucesso!");
 
       router.replace("(tabs)");
     } catch (error) {
