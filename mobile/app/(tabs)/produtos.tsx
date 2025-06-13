@@ -33,15 +33,6 @@ export default function Produtos() {
   const [preco, setPreco] = useState("");
   const queryClient = useQueryClient();
 
-  useEffect(() => {
-    (async () => {
-      const { status } = await MediaLibrary.requestPermissionsAsync();
-      if (status !== "granted") {
-        alert("É necessário permissão para acessar a biblioteca de mídia");
-      }
-    })();
-  }, []);
-
   const selecionaProdutos = async (): Promise<CardProps[]> => {
     const response = await api.get("/produtos");
     return response.data;
