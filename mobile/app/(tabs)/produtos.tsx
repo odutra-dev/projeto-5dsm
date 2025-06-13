@@ -8,6 +8,7 @@ import {
   TextInput,
   Image,
   Alert,
+  ActivityIndicator,
 } from "react-native";
 import Header from "../../components/Header";
 import theme from "../../theme";
@@ -41,6 +42,11 @@ export default function Produtos() {
 
   const salvarProduto = async ({ nome, descricao, preco, imagem }) => {
     try {
+      // Verificação extra para garantir que a imagem tenha sido selecionada
+      if (!imagem || !imagem.uri) {
+        throw new Error("Imagem não selecionada ou URL inválida.");
+      }
+
       const formData = new FormData();
 
       formData.append("nome", nome);
@@ -49,8 +55,8 @@ export default function Produtos() {
 
       formData.append("file", {
         uri: imagem.uri,
-        name: imagem.name || "foto.jpg",
-        type: imagem.type || "image/jpeg",
+        name: imagem.name || "imagem.jpg",
+        type: imagem.type || "image/jpeg", // Confirmando que o tipo é correto
       });
 
       const response = await api.post("/produtos", formData, {
@@ -59,12 +65,10 @@ export default function Produtos() {
         },
       });
 
-      console.log("Produto salvo com sucesso:", response.data);
+      return response.data; // opcional para usar onSuccess com dados
     } catch (error) {
-      console.error(
-        "Erro ao salvar produto:",
-        error.response?.data || error.message
-      );
+      console.error("Erro ao salvar produto:", error);
+      throw error; // para o React Query captar o erro
     }
   };
 
@@ -87,12 +91,15 @@ export default function Produtos() {
     queryFn: selecionaProdutos,
   });
 
-  const selecionarImagem = async (setImagem) => {
+  const selecionarImagem = async (
+    setImagem: (img: ImagemSelecionada) => void
+  ) => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+
     if (status !== "granted") {
       Alert.alert(
         "Permissão necessária",
-        "Você precisa permitir acesso à galeria."
+        "Você precisa permitir acesso à galeria nas configurações do app."
       );
       return;
     }
@@ -101,18 +108,22 @@ export default function Produtos() {
       mediaTypes: "images",
       allowsEditing: true,
       quality: 1,
+      base64: false, // <- isso é o padrão, mas explícito aqui
     });
+
+    console.log("Resultado do ImagePicker:", result); // Adicionando log aqui
 
     if (!result.canceled && result.assets.length > 0) {
       const asset = result.assets[0];
 
-      const imagem = {
+      const imagemSelecionada: ImagemSelecionada = {
         uri: asset.uri,
         name: asset.fileName ?? "imagem.jpg",
-        type: asset.type ?? "image/jpeg",
+        type: asset.type?.startsWith("image/") ? asset.type : "image/jpeg", // força tipo válido
       };
 
-      setImagem(imagem);
+      console.log("Imagem selecionada:", imagemSelecionada); // Verificando o que é passado para o setImagem
+      setImagem(imagemSelecionada);
     }
   };
 
@@ -154,7 +165,7 @@ export default function Produtos() {
               style={styles.imagePicker}
               onPress={() => selecionarImagem(setImagem)}
             >
-              {imagem ? (
+              {imagem?.uri ? (
                 <Image
                   source={{ uri: imagem.uri }}
                   style={styles.imagePreview}
@@ -185,26 +196,45 @@ export default function Produtos() {
               style={styles.input}
             />
 
-            <TouchableOpacity
-              style={styles.salvar}
-              onPress={() =>
-                mutationAdicionaProduto.mutate({
-                  nome,
-                  descricao,
-                  preco,
-                  imagem,
-                })
-              }
-            >
-              <Text style={styles.salvarText}>Salvar</Text>
-            </TouchableOpacity>
+            {mutationAdicionaProduto.isPending ? (
+              <View style={{ marginVertical: 16, alignItems: "center" }}>
+                <ActivityIndicator
+                  size="large"
+                  color={theme.colors.rosePrincipal[500]}
+                />
+                <Text
+                  style={{
+                    marginTop: 8,
+                    color: theme.colors.rosePrincipal[500],
+                  }}
+                >
+                  Salvando produto...
+                </Text>
+              </View>
+            ) : (
+              <>
+                <TouchableOpacity
+                  style={styles.salvar}
+                  onPress={() =>
+                    mutationAdicionaProduto.mutate({
+                      nome,
+                      descricao,
+                      preco,
+                      imagem,
+                    })
+                  }
+                >
+                  <Text style={styles.salvarText}>Salvar</Text>
+                </TouchableOpacity>
 
-            <TouchableOpacity
-              style={styles.cancelar}
-              onPress={() => setModalVisible(false)}
-            >
-              <Text style={styles.cancelarText}>Cancelar</Text>
-            </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.cancelar}
+                  onPress={() => setModalVisible(false)}
+                >
+                  <Text style={styles.cancelarText}>Cancelar</Text>
+                </TouchableOpacity>
+              </>
+            )}
           </View>
         </View>
       </Modal>
