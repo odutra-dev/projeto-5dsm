@@ -86,7 +86,7 @@ export default function Produtos() {
   });
 
   const selecionarImagem = async (setImagem) => {
-    const { status } = await MediaLibrary.requestPermissionsAsync();
+    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (status !== "granted") {
       Alert.alert(
         "Permissão necessária",
@@ -96,23 +96,18 @@ export default function Produtos() {
     }
 
     const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      mediaTypes: "images",
       allowsEditing: true,
       quality: 1,
-      base64: false,
     });
 
     if (!result.canceled && result.assets.length > 0) {
       const asset = result.assets[0];
 
-      const assetInfo = await MediaLibrary.getAssetInfoAsync(
-        asset.assetId || asset.id
-      );
-
       const imagem = {
-        uri: assetInfo.localUri || asset.uri,
-        name: asset.fileName || "imagem.jpg",
-        type: asset.mimeType || "image/jpeg",
+        uri: asset.uri,
+        name: asset.fileName ?? "imagem.jpg",
+        type: asset.type ?? "image/jpeg",
       };
 
       setImagem(imagem);
