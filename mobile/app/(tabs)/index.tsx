@@ -13,54 +13,25 @@ import Header from "../../components/Header";
 import theme from "../../theme";
 import CardStatus from "../../components/CardStatus";
 import CardPedido from "../../components/CardPedido";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { api } from "../../services/api";
 
 export default function Home() {
   const [user, setUser] = useState("");
+  const queryClient = useQueryClient();
+
+  const selecionaPedidos = async () => {
+    const response = await api.get("/pedido");
+    console.log(response.data);
+    return response.data;
+  };
+
+  const querySelecionaPedidos = useQuery({
+    queryKey: ["pedidos"],
+    queryFn: selecionaPedidos,
+  });
 
   const router = useRouter();
-
-  const pedidos = [
-    {
-      numero: "ORD-006",
-      nome: "Eduardo Lima",
-      endereco: "Rua dos Ipês, 987 - Alto da Boa Vista",
-      horario: "11:45",
-      itens: 21,
-      pagamento: "Cartão de Crédito",
-      valor: "R$ 120,00",
-      status: "PENDENTE",
-    },
-    {
-      numero: "ORD-007",
-      nome: "Eduardo Lima",
-      endereco: "Rua dos Ipês, 987 - Alto da Boa Vista",
-      horario: "11:45",
-      itens: 21,
-      pagamento: "Cartão de Crédito",
-      valor: "R$ 120,00",
-      status: "EMPRODUCAO",
-    },
-    {
-      numero: "ORD-008",
-      nome: "Eduardo Lima",
-      endereco: "Rua dos Ipês, 987 - Alto da Boa Vista",
-      horario: "11:45",
-      itens: 21,
-      pagamento: "Cartão de Crédito",
-      valor: "R$ 120,00",
-      status: "PRONTO",
-    },
-    {
-      numero: "ORD-009",
-      nome: "Eduardo Lima",
-      endereco: "Rua dos Ipês, 987 - Alto da Boa Vista",
-      horario: "11:45",
-      itens: 21,
-      pagamento: "Cartão de Crédito",
-      valor: "R$ 120,00",
-      status: "CONCLUIDO",
-    },
-  ];
 
   useEffect(() => {
     const getUser = async () => {
@@ -103,8 +74,8 @@ export default function Home() {
             </View>
           </>
         }
-        data={pedidos}
-        keyExtractor={(item) => item.numero}
+        data={querySelecionaPedidos.data}
+        keyExtractor={(item) => item.id}
         renderItem={({ item }) => <CardPedido {...item} />}
       />
     </View>

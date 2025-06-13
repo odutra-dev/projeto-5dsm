@@ -1,5 +1,7 @@
 import { View, Text, StyleSheet } from "react-native";
 import theme from "../../theme";
+import { useEffect, useState } from "react";
+import { api } from "../../services/api";
 
 const statusConfig = {
   PENDENTE: {
@@ -44,28 +46,65 @@ const statusConfig = {
   },
 };
 
-type Props = {
+type Endereco = {
+  id: string;
+  cep: string;
+  rua: string;
+  bairro: string;
   numero: string;
-  nome: string;
-  endereco: string;
+  complemento: string;
+  clientId: string;
+};
+
+type Props = {
+  id: string;
+  data: string;
   horario: string;
-  itens: number;
-  pagamento: string;
-  valor: string;
+  clienteId: string;
+  produtos: {
+    produtoId: string;
+    quantidade: number;
+  }[];
+  tipo_pagamento: string;
+  tipo_entrega: string;
+  valor: number;
   status: keyof typeof statusConfig;
 };
 
 export default function CardPedido({
-  numero,
-  nome,
-  endereco,
+  id,
+  data,
   horario,
-  itens,
-  pagamento,
+  clienteId,
+  produtos,
+  tipo_pagamento,
+  tipo_entrega,
   valor,
   status,
 }: Props) {
   const { bg, borderBg, bgLabel, textColor, label } = statusConfig[status];
+
+  const [nome, setNome] = useState<string>("");
+  const [endereco, setEndereco] = useState<Endereco | null>(null);
+
+  useEffect(() => {
+    getUser();
+  }, []);
+
+  const getUser = async () => {
+    const user = await api.get(`/clientes/${clienteId}`);
+    setNome(user.data.nome);
+
+    const enderecos = await api.get(`/enderecos/`);
+
+    const enderecoAchado = enderecos.data.find(
+      (endereco: any) => endereco.clienteId === user.data.id
+    );
+
+    if (enderecoAchado) {
+      setEndereco(enderecoAchado);
+    }
+  };
 
   return (
     <View
@@ -85,22 +124,24 @@ export default function CardPedido({
 
       {/* Número do pedido */}
       <Text style={[styles.numeroPedido, { color: textColor.number }]}>
-        {numero}
+        {id}
       </Text>
 
       {/* Nome e endereço */}
       <Text style={[styles.nome, { color: textColor.label }]}>{nome}</Text>
       <Text style={[styles.endereco, { color: textColor.label }]}>
-        {endereco}
+        {endereco == null
+          ? "Av. Francisco Glycério, 571, Santos, São Paulo"
+          : endereco.rua + ", " + endereco.numero}
       </Text>
 
       {/* Linha pontilhada */}
       <View style={[styles.dashedLine, { borderColor: borderBg }]} />
 
       {/* Horário e quantidade de itens */}
-      <Text
-        style={[styles.info, { color: textColor.label }]}
-      >{`${horario} — ${itens} itens`}</Text>
+      <Text style={[styles.info, { color: textColor.label }]}>{`${horario} — ${
+        Array.isArray(produtos) ? produtos.length : 0
+      } itens`}</Text>
 
       {/* Linha pontilhada */}
       <View style={[styles.dashedLine, { borderColor: borderBg }]} />
@@ -108,9 +149,11 @@ export default function CardPedido({
       {/* Tipo de pagamento e valor */}
       <View style={styles.footer}>
         <Text style={[styles.pagamento, { color: textColor.label }]}>
-          {pagamento}
+          {tipo_pagamento}
         </Text>
-        <Text style={[styles.valor, { color: textColor.label }]}>{valor}</Text>
+        <Text style={[styles.valor, { color: textColor.label }]}>
+          R$ {valor.toFixed(2)}
+        </Text>
       </View>
     </View>
   );
