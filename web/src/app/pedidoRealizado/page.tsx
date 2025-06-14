@@ -1,28 +1,81 @@
 "use client";
-import Image from "next/image";
 
-import { usePedido } from "@/context/pedido";
+import Image from "next/image";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { useEffect } from "react";
 import { api } from "@/services/api";
+import { usePedido } from "@/context/pedido";
+
+type PedidoProduto = {
+  produtoId: string;
+  quantidade: number;
+};
+
+type Pedido = {
+  id: string;
+  data: string;
+  horario: string;
+  clienteId: string;
+  produtos: PedidoProduto[];
+  tipo_pagamento: string;
+  tipo_entrega: string;
+  valor: number;
+  status: "PENDENTE" | "EMPRODUCAO" | "PRONTO" | "CONCLUIDO";
+};
 
 export const PedidoRealizado = () => {
   const { pedido } = usePedido();
+  const [pedidoLocal, setPedidoLocal] = useState<Pedido | null>(null);
+  const [carregando, setCarregando] = useState(true);
 
-  const selectPedido = async () => {
-    const { data } = await api.get(`/pedido/${pedido.id}`);
+  // Carrega o pedido do localStorage ou do contexto
+  useEffect(() => {
+    const pedidoSalvo = localStorage.getItem("pedido");
 
-    return data;
-  };
+    if (pedidoSalvo) {
+      const pedidoParse = JSON.parse(pedidoSalvo);
+      setPedidoLocal(pedidoParse);
+    } else if (pedido?.id) {
+      localStorage.setItem("pedido", JSON.stringify(pedido));
+      setPedidoLocal(pedido);
+    }
 
-  const query = useQuery({
-    queryKey: ["pedido"],
-    queryFn: () => selectPedido(),
+    setCarregando(false);
+  }, [pedido]);
+
+  const { data: pedidoAtualizado } = useQuery({
+    queryKey: ["pedido", pedidoLocal?.id],
+    queryFn: async () => {
+      const { data } = await api.get(`/pedido/${pedidoLocal?.id}`);
+      localStorage.setItem("pedido", JSON.stringify(data));
+      return data;
+    },
+    enabled: !!pedidoLocal?.id,
+    refetchInterval: 5000, // Atualiza a cada 5 segundos
   });
 
   const usuario = localStorage.getItem("usuarioLogado");
-  const endereco = usuario?.endereco;
+  const endereco = usuario ? JSON.parse(usuario).endereco : null;
+
+  const pedidoInfo = pedidoAtualizado || pedidoLocal;
+
+  // 🔥 Verificações
+  if (carregando) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <p className="text-primary-text text-xl">Carregando...</p>
+      </div>
+    );
+  }
+
+  if (!pedidoInfo) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <p className="text-primary-text text-xl">Nenhum pedido encontrado 😕</p>
+      </div>
+    );
+  }
 
   return (
     <>
@@ -31,7 +84,7 @@ export const PedidoRealizado = () => {
           <Image
             className="w-12 h-12"
             src="/certo.svg"
-            alt="Geladinho Santista"
+            alt="Pedido confirmado"
             width={24}
             height={24}
           />
@@ -44,10 +97,12 @@ export const PedidoRealizado = () => {
         </div>
       </header>
 
-      <main className="mt-6 flex justify-center flex-col  px-6 w-full">
+      <main className="mt-6 flex justify-center flex-col px-6 w-full">
         <div className="w-full md:max-w-xl flex rounded-2xl justify-between bg-primary/30 border-1 border-primary-text p-4 gap-4">
           <p className="text-primary-text">Status:</p>
-          <p className="font-bold text-primary-text">{query.data?.status}</p>
+          <p className="font-bold text-primary-text">
+            {pedidoInfo?.status || "Carregando..."}
+          </p>
         </div>
 
         <h2 className="text-center font-bold text-primary-text text-2xl">
@@ -56,29 +111,30 @@ export const PedidoRealizado = () => {
         <div className="mt-6 w-full md:max-w-xl flex flex-col rounded-2xl justify-center bg-primary/30 border-1 border-primary-text p-4 gap-4">
           <div className="text-primary-text flex justify-between">
             <p>Código do pedido:</p>
-            <p>{pedido?.id}</p>
+            <p>{pedidoInfo?.id}</p>
           </div>
           <hr className="w-full border-1 border-primary border-dashed" />
           <div className="text-primary-text flex justify-between">
             <p>Data do pedido:</p>
-            <p>{pedido?.data}</p>
+            <p>{pedidoInfo?.data}</p>
           </div>
         </div>
 
         <h2 className="text-center font-bold text-primary-text text-2xl mt-6">
           Detalhes da{" "}
-          {pedido?.tipo_entrega === "Delivery" ? "entrega" : "retirada"}
+          {pedidoInfo?.tipo_entrega === "Delivery" ? "entrega" : "retirada"}
         </h2>
 
         <div className="mt-6 w-full md:max-w-xl flex flex-col rounded-2xl justify-center bg-primary/30 border-1 border-primary-text p-4 gap-4">
           <div className="text-primary-text flex justify-between flex-col">
             <p>
               Local da{" "}
-              {pedido?.tipo_entrega === "Delivery" ? "entrega" : "retirada"}:
+              {pedidoInfo?.tipo_entrega === "Delivery" ? "entrega" : "retirada"}
+              :
             </p>
             <p>
-              {pedido?.tipo_entrega === "Delivery"
-                ? endereco.rua + ", " + endereco.numero
+              {pedidoInfo?.tipo_entrega === "Delivery"
+                ? `${endereco?.rua}, ${endereco?.numero}`
                 : "Avenida Francisco Glycério, 571"}
             </p>
           </div>

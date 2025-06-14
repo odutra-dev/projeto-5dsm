@@ -64,6 +64,7 @@ export const Entrega = () => {
       });
 
       setPedido(pedidoRealizado.data);
+      localStorage.setItem("pedido", JSON.stringify(pedidoRealizado.data));
 
       router.push("/pedidoRealizado");
     } catch (error) {
