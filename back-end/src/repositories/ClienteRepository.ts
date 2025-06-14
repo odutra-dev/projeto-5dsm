@@ -37,6 +37,8 @@ export class ClienteRepository {
     horario: string;
     tipo_entrega: string;
     tipo_pagamento: string;
+    status: string;
+    valor: number;
     produtos: {
       produtoId: string;
       nome: string;
@@ -44,9 +46,21 @@ export class ClienteRepository {
     }[];
   }) {
     const pedidoRef = doc(db, "clientes", clienteId, "pedidos", pedidoData.pedidoId);
-    await setDoc(pedidoRef, pedidoData);
+
+    // Validação de campos obrigatórios
+    if (
+      pedidoData.status === undefined ||
+      pedidoData.valor === undefined ||
+      !pedidoData.status ||
+      !pedidoData.valor
+    ) {
+      throw new Error("Campos obrigatórios 'status' ou 'valor' estão ausentes ou indefinidos");
+    }
+
+    // Remover campos undefined
+    const cleanPedido = JSON.parse(JSON.stringify(pedidoData));
+    await setDoc(pedidoRef, cleanPedido);
   }
-  
 
   async findAll(): Promise<Cliente[]> {
     const clienteCol = collection(db, "clientes");

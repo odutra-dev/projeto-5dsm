@@ -5,6 +5,7 @@ export type Endereco = {
     bairro: string;
     numero: string;
     complemento: string;
+    clienteId: string;
   };
 
   export type NovoEndereco = {

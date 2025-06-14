@@ -12,17 +12,19 @@ import { SignIn } from "phosphor-react-native";
 import { api } from "../services/api";
 import { useRouter } from "expo-router";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import theme from "../theme";
+import { showToastWithGravity } from "../util/toast";
 
 export default function Login() {
   const [email, setEmail] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
+  const [senha, setSenha] = useState<string>("");
 
   const router = useRouter();
 
   const [loading, setLoading] = useState(false);
 
   const fazerLogin = async () => {
-    if (!email || !password) {
+    if (!email || !senha) {
       Alert.alert("Campos obrigatórios", "Preencha e-mail e senha.");
       return;
     }
@@ -30,7 +32,7 @@ export default function Login() {
     setLoading(true);
 
     try {
-      const response = await api.post("/admins/login", { email, password });
+      const response = await api.post("/admins/login", { email, senha });
 
       const { token, nome } = response.data;
 
@@ -41,6 +43,8 @@ export default function Login() {
 
       await AsyncStorage.setItem("token", token);
       await AsyncStorage.setItem("user", nome);
+
+      showToastWithGravity("Login realizado com sucesso!");
 
       router.replace("(tabs)");
     } catch (error) {
@@ -83,8 +87,8 @@ export default function Login() {
           <TextInput
             secureTextEntry
             style={styles.input}
-            onChangeText={setPassword}
-            value={password}
+            onChangeText={setSenha}
+            value={senha}
           />
         </View>
 
@@ -93,10 +97,16 @@ export default function Login() {
           onPress={fazerLogin}
           disabled={loading}
         >
-          <Text style={{ color: "#FFFBD6", fontSize: 16, fontWeight: "bold" }}>
+          <Text
+            style={{
+              color: theme.colors.yellowBG[100],
+              fontSize: 16,
+              fontWeight: "bold",
+            }}
+          >
             {loading ? "Entrando..." : "Entrar"}
           </Text>
-          <SignIn size={24} color="#FFFBD6" weight="bold" />
+          <SignIn size={24} color={theme.colors.yellowBG[100]} weight="bold" />
         </TouchableOpacity>
       </View>
     </View>
@@ -106,10 +116,10 @@ export default function Login() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#FFFBD6",
+    backgroundColor: theme.colors.yellowBG[100],
   },
   header: {
-    backgroundColor: "#F493AE",
+    backgroundColor: theme.colors.rosePrincipal[300],
     paddingHorizontal: 24,
     height: 128,
     position: "relative",
@@ -126,12 +136,12 @@ const styles = StyleSheet.create({
     gap: 16,
   },
   titulo: {
-    color: "#F493AE",
+    color: theme.colors.rosePrincipal[500],
     fontSize: 24,
     fontWeight: "bold",
   },
   label: {
-    color: "#A45E4D",
+    color: theme.colors.chocolateBrown[600],
     fontSize: 16,
   },
   input: {
@@ -139,14 +149,16 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     paddingHorizontal: 16,
     borderWidth: 1,
-    borderColor: "#F493AE",
+    borderColor: theme.colors.rosePrincipal[300],
   },
   botao: {
     height: 48,
     flexDirection: "row",
     paddingHorizontal: 24,
     borderRadius: 8,
-    backgroundColor: "#F493AE",
+    borderWidth: 2,
+    borderColor: theme.colors.rosePrincipal[400],
+    backgroundColor: theme.colors.rosePrincipal[300],
     alignItems: "center",
     justifyContent: "space-between",
   },

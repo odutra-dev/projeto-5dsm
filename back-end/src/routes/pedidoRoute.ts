@@ -30,6 +30,8 @@ export async function pedidoRoute(app: FastifyInstance) {
         tipo_pagamento,
         clienteId,
         produtos,
+        status,
+        valor,
       } = request.body;
 
       const clienteExiste = await clienteRepository.findById(clienteId);
@@ -46,6 +48,8 @@ export async function pedidoRoute(app: FastifyInstance) {
           tipo_pagamento,
           clienteId,
           produtos, // apenas com produtoId e quantidade
+          status,
+          valor,
         });
 
         // Cria subdocumento dentro do cliente
@@ -56,6 +60,8 @@ export async function pedidoRoute(app: FastifyInstance) {
           tipo_entrega,
           tipo_pagamento,
           produtos,
+          status,
+          valor,
         });
 
         return reply.status(201).send(pedido);
@@ -101,4 +107,56 @@ export async function pedidoRoute(app: FastifyInstance) {
       return pedido;
     },
   });
+
+  // PUT - Atualizar status do pedido
+  app.put<{ Params: { id: string }; Body: { status: string } }>("/:id", {
+  schema: {
+    tags: ["Pedido"],
+    description: "Atualiza o status de um pedido pelo ID",
+    params: {
+      type: "object",
+      properties: {
+        id: { type: "string" },
+      },
+      required: ["id"],
+    },
+    body: {
+      type: "object",
+      properties: {
+        status: { type: "string" },
+      },
+      required: ["status"],
+    },
+    response: {
+      200: {
+        description: "Pedido atualizado com sucesso",
+        type: "object",
+        properties: {
+          mensagem: { type: "string" },
+        },
+      },
+      404: {
+        description: "Pedido não encontrado",
+        type: "object",
+        properties: {
+          mensagem: { type: "string" },
+        },
+      },
+    },
+  },
+  handler: async (request, reply) => {
+    const { id } = request.params;
+    const { status } = request.body;
+
+    const pedidoExiste = await useCasePedido.findById(id);
+    if (!pedidoExiste) {
+      return reply.status(404).send({ mensagem: "Pedido não encontrado" });
+    }
+
+    await useCasePedido.updateStatus(id, status);
+
+    return reply.send({ mensagem: "Status do pedido atualizado com sucesso" });
+  },
+  });
+
 }

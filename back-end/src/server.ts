@@ -16,7 +16,7 @@ import fs from "fs";
 const app = fastify({ logger: true });
 
 // Registro de plugins
-app.register(cors);
+app.register(cors, { origin: "*", methods: ["GET", "POST", "PUT", "DELETE"] });
 
 app.register(fastifyMultipart, {
   limits: {
