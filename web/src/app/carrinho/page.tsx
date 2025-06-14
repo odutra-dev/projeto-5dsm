@@ -3,15 +3,17 @@ import { CardCarrinho } from "@/components/CardCarrinho";
 import Header from "@/components/Header";
 import Image from "next/image";
 import { useCarrinho } from "@/context/carrinho";
-import { useState } from "react";
 import { useRouter } from "next/navigation";
 
 export const Carrinho = () => {
-  const { carrinho } = useCarrinho();
+  const {
+    carrinho,
+    setMetodoEntrega,
+    setMetodoPagamento,
+    metodoEntrega,
+    metodoPagamento,
+  } = useCarrinho();
   const router = useRouter();
-
-  const [metodoPagamento, setMetodoPagamento] = useState<string>("Dinheiro");
-  const [metodoEntrega, setMetodoEntrega] = useState<string>("Delivery");
 
   const metodosPagamento = ["Dinheiro", "Débito", "Crédito", "Pix"];
   const metodosEntrega = ["Delivery", "Retirada"];
@@ -30,30 +32,7 @@ export const Carrinho = () => {
       return;
     }
 
-    if (metodoEntrega === "Delivery") {
-      router.push("/entrega");
-    } else {
-      /* const mensagem = encodeURIComponent(`
-Novo Pedido:
-${carrinho
-  .map(
-    (item) =>
-      `- ${item.nome} (x${item.quantidade || 1}) - R$ ${(
-        item.preco * (item.quantidade || 1)
-      ).toFixed(2)}`
-  )
-  .join("\n")}
-
-Total: R$ ${total.toFixed(2)}
-Pagamento: ${metodoPagamento}
-Entrega: ${metodoEntrega}
-      `);
-
-      const numeroWhatsApp = process.env.NEXT_PUBLIC_WHATSAPP;
-      const urlWhatsApp = `https://wa.me/${numeroWhatsApp}?text=${mensagem}`;
-
-      window.open(urlWhatsApp, "_blank"); */
-    }
+    router.push("/entrega");
   };
 
   return (

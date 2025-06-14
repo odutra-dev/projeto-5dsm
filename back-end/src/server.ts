@@ -16,7 +16,7 @@ import fs from "fs";
 const app = fastify({ logger: true });
 
 // Registro de plugins
-app.register(cors);
+app.register(cors, { origin: "*", methods: ["GET", "POST", "PUT", "DELETE"] });
 
 app.register(fastifyMultipart, {
   limits: {
@@ -80,8 +80,10 @@ app.register(pedidoRoute, {
   prefix: "/pedido",
 });
 
+const PORT = Number(process.env.PORT) || 8001;
+
 // Iniciar o servidor
-app.listen({ port: 8001 }, (err, address) => {
+app.listen({ port: PORT, host: "0.0.0.0" }, (err, address) => {
   const fileName = process.env.STORAGEFILENAME;
   const filePath = path.join(__dirname, "/firebase/", fileName);
   const content = JSON.stringify(

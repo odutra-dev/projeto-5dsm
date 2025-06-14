@@ -2,8 +2,12 @@
 import { Admin, NovoAdmin } from "../@types/typesAdmin";
 import { AdminRepository } from "../repositories/AdminRepository";
 import { encrypt, decrypt } from "../utils/aes";
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
-import { firebaseApp } from "../firebase/firebaseConfig"; // seu app Firebase
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+} from "firebase/auth";
+import { firebaseApp, auth } from "../firebase/firebaseConfig"; // seu app Firebase
 
 export class UseCaseAdmin {
   private repository: AdminRepository;
@@ -12,12 +16,20 @@ export class UseCaseAdmin {
     this.repository = new AdminRepository();
   }
 
-  async create({ nome, email, senha }: NovoAdmin): Promise<Omit<Admin, "senha">> {
+  async create({
+    nome,
+    email,
+    senha,
+  }: NovoAdmin): Promise<Omit<Admin, "senha">> {
     const auth = getAuth(firebaseApp);
 
     try {
       // 1. Cria no Firebase Auth
-      const userCredential = await createUserWithEmailAndPassword(auth, email, senha);
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        senha
+      );
       const firebaseUid = userCredential.user.uid;
 
       // 2. Criptografa email e senha
@@ -27,7 +39,7 @@ export class UseCaseAdmin {
       // 3. Cria no banco de dados com UID do Firebase
       const admin = await this.repository.create({
         nome,
-        email: encryptedEmail,
+        email,
         senha: encryptedSenha,
         firebaseUid,
       });
@@ -40,6 +52,32 @@ export class UseCaseAdmin {
     } catch (error) {
       console.error("Erro ao criar administrador:", error);
       throw new Error("Erro ao criar administrador");
+    }
+  }
+
+  // Realiza o login de um administrador utilizando Firebase Auth com email e senha.
+  // Se as credenciais forem válidas, retorna o token de autenticação (idToken).
+  async login(
+    email: string,
+    senha: string
+  ): Promise<{ token: string; nome: string }> {
+    try {
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        email,
+        senha
+      );
+      const token = await userCredential.user.getIdToken();
+      const admin = await this.repository.findByEmail(email);
+
+      if (!admin) {
+        throw new Error("Administrador não encontrado");
+      }
+
+      return { token, nome: admin.nome };
+    } catch (error) {
+      console.error("Erro no login:", error);
+      throw new Error("Credenciais inválidas");
     }
   }
 

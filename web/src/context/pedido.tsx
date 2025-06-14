@@ -9,56 +9,57 @@ import {
 } from "react";
 
 // Defina o tipo do item no carrinho, ajuste conforme seu caso real
-interface ItemCarrinho {
+interface Pedido {
   id: string;
-  nome: string;
-  descricao: string;
-  imagemUrl: string;
-  preco: number;
-  quantidade: number;
+  data: string;
+  horario: string;
+  tipo_entrega: string;
+  tipo_pagamento: string;
+  clienteId: string;
+  produtos: {
+    produtoId: string;
+    quantidade: number;
+  }[];
 }
 
-// Tipo para o contexto
-interface CarrinhoContextType {
-  carrinho: ItemCarrinho[];
-  setCarrinho: Dispatch<SetStateAction<ItemCarrinho[]>>;
+interface PedidoContextType {
   metodoPagamento: string;
   setMetodoPagamento: Dispatch<SetStateAction<string>>;
   metodoEntrega: string;
   setMetodoEntrega: Dispatch<SetStateAction<string>>;
+  pedido: Pedido | null;
+  setPedido: Dispatch<SetStateAction<Pedido | null>>;
 }
 
 // Cria o contexto com tipo ou valor inicial null
-const CarrinhoContext = createContext<CarrinhoContextType | undefined>(
-  undefined
-);
+const PedidoContext = createContext<PedidoContextType | undefined>(undefined);
 
-export function CarrinhoProvider({ children }: { children: ReactNode }) {
-  const [carrinho, setCarrinho] = useState<ItemCarrinho[]>([]);
+export function PedidoProvider({ children }: { children: ReactNode }) {
+  const [pedido, setPedido] = useState<Pedido | null>(null);
   const [metodoPagamento, setMetodoPagamento] = useState<string>("Dinheiro");
   const [metodoEntrega, setMetodoEntrega] = useState<string>("Delivery");
 
   return (
-    <CarrinhoContext.Provider
+    <PedidoContext.Provider
       value={{
-        carrinho,
-        setCarrinho,
         metodoPagamento,
         setMetodoPagamento,
         metodoEntrega,
         setMetodoEntrega,
+        pedido,
+        setPedido,
       }}
     >
       {children}
-    </CarrinhoContext.Provider>
+    </PedidoContext.Provider>
   );
 }
 
 // Custom hook que já verifica se o contexto está dentro do provider
-export function useCarrinho() {
-  const context = useContext(CarrinhoContext);
+export function usePedido() {
+  const context = useContext(PedidoContext);
   if (!context) {
-    throw new Error("useCarrinho deve ser usado dentro de um CarrinhoProvider");
+    throw new Error("usePedido deve ser usado dentro de um PedidoProvider");
   }
   return context;
 }

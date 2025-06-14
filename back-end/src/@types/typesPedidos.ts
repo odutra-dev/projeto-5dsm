@@ -1,24 +1,30 @@
 import { Timestamp } from "firebase/firestore";
 
 export type Pedido = {
-    id: string;
-    data: string;
-    horario: string;
-    tipo_entrega: string;
-    tipo_pagamento: string;
-  };
+  id: string;
+  data: string;
+  horario: string;
+  tipo_entrega: string;
+  tipo_pagamento: string;
+  clienteId: string; // ✅ Adicionado aqui
+  produtos: PedidoProduto[];
+  status: string;
+  valor: number;
+};
 
-  export type PedidoProduto = {
-    produtoId: string;
-    quantidade: number; // se quiser controlar quantidade
-    nome: string; 
-  };
+export type PedidoProduto = {
+  produtoId: string;
+  quantidade: number; // se quiser controlar a quantidade
+  nome: string;
+};
 
-  export type NovoPedido = {
-    data: string;
-    horario: string;
-    tipo_entrega: string;
-    tipo_pagamento: string;
-    clienteId: string;
-    produtos: PedidoProduto[]; // nova relação
-  };
+export type NovoPedido = {
+  data: string;
+  horario: string;
+  tipo_entrega: string;
+  tipo_pagamento: string;
+  clienteId: string;
+  produtos: PedidoProduto[];
+  status: string;
+  valor: number;
+};

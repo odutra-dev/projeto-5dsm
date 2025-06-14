@@ -16,6 +16,7 @@ export class EnderecoRepository {
             bairro: endereco.bairro,
             numero: endereco.numero,
             complemento: endereco.complemento,
+            clienteId: endereco.clienteId
         };
 
         await setDoc(novaRef, novoEndereco);

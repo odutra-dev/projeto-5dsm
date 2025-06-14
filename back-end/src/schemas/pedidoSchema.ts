@@ -6,6 +6,8 @@ export const createPedidoSchema = {
     tipo_entrega: { type: "string", minLength: 3, maxLength: 255 },
     tipo_pagamento: { type: "string", minLength: 3, maxLength: 255 },
     clienteId: { type: "string", minLength: 1 },
+    status: { type: "string", enum: ["PENDENTE", "CONFIRMADO", "ENTREGUE"] },
+    valor: { type: "number", minimum: 0 },
     produtos: {
       type: "array",
       items: {
@@ -26,6 +28,8 @@ export const createPedidoSchema = {
     "tipo_pagamento",
     "clienteId",
     "produtos",
+    "status",
+    "valor",
   ],
 };
 
@@ -39,6 +43,8 @@ export const createPedidoResponseSchema = {
       tipo_entrega: { type: "string" },
       tipo_pagamento: { type: "string" },
       clienteId: { type: "string" },
+      status: { type: "string" },
+      valor: { type: "number" },
       produtos: {
         type: "array",
         items: {
@@ -65,6 +71,18 @@ export const getAllPedidosResponseSchema = {
         tipo_entrega: { type: "string" },
         tipo_pagamento: { type: "string" },
         clienteId: { type: "string" },
+        status: { type: "string" },
+        valor: { type: "number" },
+        produtos: {
+          type: "array",
+          items: {
+            type: "object",
+            properties: {
+              produtoId: { type: "string" },
+              quantidade: { type: "number" },
+            },
+          },
+        },
       },
     },
   },
@@ -80,6 +98,18 @@ export const getPedidosResponseSchema = {
       tipo_entrega: { type: "string" },
       tipo_pagamento: { type: "string" },
       clienteId: { type: "string" },
+      status: { type: "string" },
+      valor: { type: "number" },
+      produtos: {
+        type: "array",
+        items: {
+          type: "object",
+          properties: {
+            produtoId: { type: "string" },
+            quantidade: { type: "number" },
+          },
+        },
+      },
     },
   },
   404: {
