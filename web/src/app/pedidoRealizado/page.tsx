@@ -24,21 +24,27 @@ type Pedido = {
   status: "PENDENTE" | "EMPRODUCAO" | "PRONTO" | "CONCLUIDO";
 };
 
-export const PedidoRealizado = () => {
+export default function PedidoRealizado() {
   const { pedido } = usePedido();
-  const [pedidoLocal, setPedidoLocal] = useState<Pedido | null>(null);
+  const [pedidoLocal, setPedidoLocal] = useState<Partial<Pedido> | null>(null);
   const [carregando, setCarregando] = useState(true);
+  const [endereco, setEndereco] = useState<any>(null); // ajuste o tipo se tiver a tipagem do endereço
 
-  // Carrega o pedido do localStorage ou do contexto
+  // Carrega o pedido e o endereço do localStorage ou do contexto
   useEffect(() => {
     const pedidoSalvo = localStorage.getItem("pedido");
 
     if (pedidoSalvo) {
       const pedidoParse = JSON.parse(pedidoSalvo);
-      setPedidoLocal(pedidoParse);
+      setPedidoLocal(pedidoParse as Pedido);
     } else if (pedido?.id) {
       localStorage.setItem("pedido", JSON.stringify(pedido));
       setPedidoLocal(pedido);
+    }
+
+    const usuario = localStorage.getItem("usuarioLogado");
+    if (usuario) {
+      setEndereco(JSON.parse(usuario).endereco);
     }
 
     setCarregando(false);
@@ -55,12 +61,8 @@ export const PedidoRealizado = () => {
     refetchInterval: 5000, // Atualiza a cada 5 segundos
   });
 
-  const usuario = localStorage.getItem("usuarioLogado");
-  const endereco = usuario ? JSON.parse(usuario).endereco : null;
-
   const pedidoInfo = pedidoAtualizado || pedidoLocal;
 
-  // 🔥 Verificações
   if (carregando) {
     return (
       <div className="flex justify-center items-center h-screen">
@@ -149,6 +151,4 @@ export const PedidoRealizado = () => {
       </main>
     </>
   );
-};
-
-export default PedidoRealizado;
+}

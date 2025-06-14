@@ -5,7 +5,7 @@ import Image from "next/image";
 import { useCarrinho } from "@/context/carrinho";
 import { useRouter } from "next/navigation";
 
-export const Carrinho = () => {
+export default function Carrinho() {
   const {
     carrinho,
     setMetodoEntrega,
@@ -156,6 +156,4 @@ export const Carrinho = () => {
       </main>
     </>
   );
-};
-
-export default Carrinho;
+}
