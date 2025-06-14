@@ -63,7 +63,7 @@ export default function Login() {
       <View style={styles.header}>
         <Image
           style={styles.logo}
-          source={require("../assets/logo.svg")}
+          source={require("../assets/logo.png")}
           alt="Geladinho Santista"
           width={24}
           height={24}
