@@ -7,7 +7,7 @@ import { useState, FormEvent, useEffect } from "react";
 import { api } from "@/services/api";
 import { useRouter } from "next/navigation";
 
-export const Entrega = () => {
+export default function Entrega() {
   const router = useRouter();
   const { metodoEntrega, metodoPagamento, carrinho } = useCarrinho();
   const { setPedido } = usePedido();
@@ -314,6 +314,4 @@ export const Entrega = () => {
       </main>
     </>
   );
-};
-
-export default Entrega;
+}

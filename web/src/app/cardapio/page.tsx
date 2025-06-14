@@ -1,22 +1,18 @@
 "use client";
 import Image from "next/image";
-
 import { useEffect, useState } from "react";
 
 import { Card } from "@/components/CardProduto";
-
 import { CardProps } from "@/@types/CardProps";
-
 import { api } from "@/services/api";
 import Header from "@/components/Header";
 
-export const Cardapio = () => {
+export default function Cardapio() {
   const [produtos, setProdutos] = useState<CardProps[]>([]);
 
   useEffect(() => {
     api.get("/produtos").then((response) => {
       setProdutos(response.data);
-      console.log(response.data);
     });
   }, []);
 
@@ -118,6 +114,4 @@ export const Cardapio = () => {
       </main>
     </>
   );
-};
-
-export default Cardapio;
+}
