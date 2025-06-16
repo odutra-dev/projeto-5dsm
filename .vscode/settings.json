@@ -1,3 +1,8 @@
 {
-  "conventionalCommits.scopes": ["web", "mobile", "back-end"]
+  "conventionalCommits.scopes": [
+    "web",
+    "mobile",
+    "back-end",
+    "machine learning"
+  ]
 }
