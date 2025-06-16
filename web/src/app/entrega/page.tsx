@@ -282,7 +282,6 @@ export default function Entrega() {
               type="tel"
               placeholder="(yy) xxxxx-xxxx"
               className="p-2 md:p-4 w-full rounded-xl border h-12 border-primary-text text-primary-text"
-              placeholder="(yy) xxxxx-xxxx"
               maxLength={15}
             />
           </div>
