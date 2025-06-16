@@ -19,6 +19,22 @@
       ]
     ],
     "name": "Geladinho Santista",
-    "slug": "geladinho-santista"
+    "slug": "geladinho-santista",
+    "android": {
+      "package": "com.geladinhosantista.app",
+      "icon": "./assets/logo.png",
+      "permissions": [
+        "android.permission.RECORD_AUDIO",
+        "android.permission.READ_EXTERNAL_STORAGE",
+        "android.permission.WRITE_EXTERNAL_STORAGE",
+        "android.permission.ACCESS_MEDIA_LOCATION",
+        "android.permission.INTERNET"
+      ]
+    },
+    "extra": {
+      "eas": {
+        "projectId": "34aaa80b-50f2-47a1-a9d1-2ed988e58361"
+      }
+    }
   }
 }
