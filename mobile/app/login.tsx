@@ -65,8 +65,8 @@ export default function Login() {
           style={styles.logo}
           source={require("../assets/logo.png")}
           alt="Geladinho Santista"
-          width={24}
-          height={24}
+          width={96}
+          height={96}
         />
       </View>
 
@@ -129,6 +129,7 @@ const styles = StyleSheet.create({
     height: 96,
     position: "absolute",
     bottom: -48,
+    left: 24,
   },
   content: {
     paddingHorizontal: 24,

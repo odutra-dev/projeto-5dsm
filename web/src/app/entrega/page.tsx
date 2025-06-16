@@ -3,7 +3,7 @@ import Header from "@/components/Header";
 import Image from "next/image";
 import { useCarrinho } from "@/context/carrinho";
 import { usePedido } from "@/context/pedido";
-import { useState, FormEvent, useEffect } from "react";
+import { useState, FormEvent, useEffect, ChangeEvent } from "react";
 import { api } from "@/services/api";
 import { useRouter } from "next/navigation";
 
@@ -175,6 +175,30 @@ export default function Entrega() {
     }
   };
 
+  const handleTelefoneChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const valor = e.target.value;
+
+    // Remove tudo que não for número
+    const somenteNumeros = valor.replace(/\D/g, "");
+
+    // Aplica a máscara
+    let telefoneFormatado = somenteNumeros;
+
+    if (somenteNumeros.length > 2 && somenteNumeros.length <= 7) {
+      telefoneFormatado = `(${somenteNumeros.slice(
+        0,
+        2
+      )}) ${somenteNumeros.slice(2)}`;
+    } else if (somenteNumeros.length > 7) {
+      telefoneFormatado = `(${somenteNumeros.slice(
+        0,
+        2
+      )}) ${somenteNumeros.slice(2, 7)}-${somenteNumeros.slice(7, 11)}`;
+    }
+
+    setTelefone(telefoneFormatado);
+  };
+
   return (
     <>
       <Header icon="back" title="Dados para entrega" link="/carrinho" />
@@ -254,10 +278,11 @@ export default function Entrega() {
             <label className="text-primary-text">Telefone</label>
             <input
               value={telefone}
-              onChange={(e) => setTelefone(e.target.value)}
+              onChange={handleTelefoneChange}
               type="tel"
-              className="p-2 md:p-4 w-full rounded-xl border h-12 border-primary-text text-primary-text"
               placeholder="(yy) xxxxx-xxxx"
+              className="p-2 md:p-4 w-full rounded-xl border h-12 border-primary-text text-primary-text"
+              maxLength={15}
             />
           </div>
 
