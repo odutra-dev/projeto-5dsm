@@ -3,7 +3,7 @@ import Header from "@/components/Header";
 import Image from "next/image";
 import { useCarrinho } from "@/context/carrinho";
 import { usePedido } from "@/context/pedido";
-import { useState, FormEvent, useEffect } from "react";
+import { useState, FormEvent, useEffect, ChangeEvent } from "react";
 import { api } from "@/services/api";
 import { useRouter } from "next/navigation";
 
@@ -175,7 +175,7 @@ export default function Entrega() {
     }
   };
 
-  const handleTelefoneChange = (e) => {
+  const handleTelefoneChange = (e: ChangeEvent<HTMLInputElement>) => {
     const valor = e.target.value;
 
     // Remove tudo que não for número
