@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.2.1](https://github.com/odutra-dev/projeto-5dsm/compare/v1.2.0...v1.2.1) (2025-06-18)
+
+### Bug Fixes
+
+* Corrigido lugar da lista de ilustrações ([38f2ec5](https://github.com/odutra-dev/projeto-5dsm/commit/38f2ec5bfac547400a2e1a2b22728080b9b40e11))
+
 ## [1.2.0](https://github.com/odutra-dev/projeto-5dsm/compare/v1.1.0...v1.2.0) (2025-06-18)
 
 ### Features
