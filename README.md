@@ -9,12 +9,12 @@ O projeto Geladinho Santista consiste em um sistema digital dividido em duas par
 
 ## Tecnologias Utilizadas
 
-- **Front-end Web**: (Tecnologias utilizadas na parte da web)
-- **Front-end Mobile**: React Native
-- **Back-end**: Node.js (API RESTful)
-- **Banco de Dados**: PostgreSQL
+- **Front-end Web**: React, Next.js, TypeScript
+- **Front-end Mobile**: React Native, Expo e TypeScript
+- **Back-end**: Node.js, Fastify e TypeScript
+- **Banco de Dados**: Firebase
 - **Machine Learning**: Algoritmo para recomendações personalizadas
-- **Hospedagem**: AWS ou Vercel
+- **Hospedagem**: Vercel e VPS
 
 ## Funcionalidades
 
