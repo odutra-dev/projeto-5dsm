@@ -29,6 +29,13 @@ Desenvolver uma solução que otimize a gestão de pedidos, melhore a experiênc
 
 ## Como executar o projeto
 
+Para executar o projeto, siga os passos abaixo:
+
+```bash
+git clone https://github.com/odutra-dev/projeto-5dsm
+cd Geladinho-Santista
+```
+
 ### Web
 
 Primeiramente entre na pasta `web` e execute:
